@@ -6,60 +6,57 @@ import PricingCard from "@components/pricing.astro";
 
 const pricing = [
   {
-    name: "Personal",
-    price: "Free",
-    popular: false,
-    features: [
-      "Lifetime free",
-      "Up to 3 users",
-      "Unlimited Pages",
-      "Astro Sub domain",
-      "Basic Integrations",
-      "Community Support",
-    ],
-    button: {
-      text: "Get Started",
-      link: "/",
-    },
-  },
-  {
-    name: "Startup",
-    price: {
-      monthly: "$19",
-      annual: "$16",
-      discount: "10%",
-      original: "$24",
-    },
+    name: "First Assessment",
+    price: "150 EUR",
     popular: true,
     features: [
-      "All Free Features",
-      "Up to 20 users",
-      "20 Custom domains",
-      "Unlimited Collaborators",
-      "Advanced Integrations",
-      "Priority Support",
+      "Detailed Code Review",
+      "Custom Migration Plan",
+      // "Risk Identification",
+      "Expert Consultation",
+      "Quote",
     ],
     button: {
-      text: "Get Started",
-      link: "#",
+      text: "Contact me",
+      link: "/",
     },
+    description:
+      "Get a comprehensive analysis of your Vue 2 codebase with a tailored migration plan and expert advice.",
   },
   {
-    name: "Enterprise",
+    name: "Full Migration",
     price: "Custom",
     popular: false,
     features: [
-      "All Pro Features",
-      "Unlimited Custom domains",
-      "99.99% Uptime SLA",
-      "SAML & SSO Integration",
-      "Dedicated Account Manager",
-      "24/7 Phone Support",
+      "Complete Migration Service",
+      "Compatibility Assurance",
+      "Thorough Testing",
+      "Deployment Support",
     ],
     button: {
-      text: "Contact us",
+      text: 'Needs "First Assessment"',
+      link: "#",
+      disabled: true,
+    },
+    description:
+      "End-to-end migration from Vue 2 to Vue 3 with full testing, optimization, and deployment support.",
+  },
+  {
+    name: "Hire Per Hour",
+    price: "90 EUR / h",
+    popular: false,
+    features: [
+      "Flexible Hours",
+      "Task-Based Work",
+      "On-Demand Expertise",
+      "Scalable Support",
+    ],
+    button: {
+      text: "Contact me",
       link: "/contact",
     },
+    description:
+      "Get expert help on specific tasks as needed, with flexible hourly engagement.",
   },
 ];
 ---
