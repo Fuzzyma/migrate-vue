@@ -1,0 +1,75 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/container.astro";
+import Sectionhead from "@components/sectionhead.astro";
+---
+
+<Layout title="Privacy Policy">
+  <Container>
+    <Sectionhead>
+      <Fragment slot="title">Privacy Policy</Fragment>
+      <Fragment slot="desc"></Fragment>
+    </Sectionhead>
+
+    <div class="flex flex-col gap-4 mx-auto max-w-4xl mt-16 [&>p]:mb-4">
+      <p>
+        As website operators, we take the protection of all personal data very
+        seriously. All personal information is treated confidentially and in
+        accordance with legal regulations, as explained in this privacy policy.
+        The use of our website is generally possible without providing personal
+        data. If personal data such as name, address, or email address is
+        collected on our pages, this is always done on a voluntary basis. This
+        data will not be passed on to third parties without your explicit
+        consent.
+      </p>
+
+      <h2 class="text-2xl">Contact</h2>
+
+      <p>
+        When contacting us via email, the sender's information will be stored
+        for the purpose of processing the request and in case follow-up
+        questions arise. If you provide your contact details through the form on
+        the homepage, we will process your data in accordance with the
+        information summarized here.
+      </p>
+
+      <h2 class="text-2xl">Hosting</h2>
+
+      <p>
+        We use the services of Netlify for hosting our website. Therefore, all
+        necessary data required to access the website (access data) is
+        transmitted to Netlify. The legal basis for the processing is Art. 6 (1)
+        sentence 1 lit. f GDPR. To ensure the protection of your personal rights
+        during these data transfers, we rely on the EU Commission's standard
+        contractual clauses under Art. 46 (2) lit. c) GDPR in our contractual
+        relationship with Netlify. These can be accessed at <a
+          href="https://www.netlify.com/legal/netlify-dpa.pdf">
+          https://www.netlify.com/legal/netlify-dpa.pdf
+        </a>.
+      </p>
+
+      <h2 class="text-2xl">Server Log Files</h2>
+
+      <p>
+        The provider of this website automatically collects and stores data
+        transmitted by your browser in server log files. This data includes:
+        browser type/browser version, operating system of the computer, referrer
+        URL, IP address/hostname of the accessing computer, time of the server
+        request. This data is not merged with other data sources. We collect
+        this data in accordance with Art. 6 (1) lit. f GDPR due to the
+        legitimate interest in protecting the website from attacks and misuse.
+        If we become aware of specific indications of unlawful use, we reserve
+        the right to review this data retrospectively.
+      </p>
+
+      <h2 class="text-2xl">Changes to the Privacy Policy</h2>
+
+      <p>
+        Our privacy policy may be adjusted at irregular intervals to meet
+        current legal requirements or to implement changes to our services, such
+        as the introduction of new offerings. The new privacy policy will
+        automatically apply to your next visit.
+      </p>
+    </div>
+  </Container>
+</Layout>

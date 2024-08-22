@@ -2,22 +2,26 @@
 const benefits = [
   {
     title: "Performance Improvements",
-    description: "Vue 3 offers significant performance enhancements with faster rendering and smaller bundle sizes.",
+    description:
+      "Vue 3 offers significant performance enhancements with faster rendering and smaller bundle sizes.",
     icon: "⚡️",
   },
   {
     title: "New Features & API",
-    description: "Enjoy new features like Composition API, Teleport, Fragments, and more for better code organization and reusability.",
+    description:
+      "Enjoy new features like Composition API, Teleport, Fragments, and more for better code organization and reusability.",
     icon: "🚀",
   },
   {
     title: "Community & Ecosystem",
-    description: "Stay up-to-date with the growing ecosystem and active community support around Vue 3.",
+    description:
+      "Stay up-to-date with the growing ecosystem and active community support around Vue 3.",
     icon: "🌐",
   },
   {
     title: "Future-Proofing",
-    description: "Avoid the risks of running unsupported software by upgrading to a version with ongoing support.",
+    description:
+      "Avoid the risks of running unsupported software by upgrading to a version with ongoing support.",
     icon: "🛡️",
   },
 ];
@@ -25,28 +29,33 @@ const benefits = [
 const migrationSteps = [
   {
     step: "1. Assessment",
-    description: "We start by reviewing your Vue 2 codebase to understand its structure, dependencies, and potential challenges. Our first assessment service offers a detailed migration plan with time estimates and key considerations. <a href=\"/pricing\" class=\"text-blue-600\">Learn more about our assessment and pricing</a> or <a href=\"/guide\" class=\"text-blue-600\">see our guide</a> on how to get your own hands dirty.",
+    description:
+      'We start by reviewing your Vue 2 codebase to understand its structure, dependencies, and potential challenges. Our first assessment service offers a detailed migration plan with time estimates and key considerations. <a href="/pricing" class="text-blue-600">Learn more about our assessment and pricing</a> or <a href="/guide" class="text-blue-600">see our guide</a> on how to get your own hands dirty.',
     icon: "🔍",
   },
   {
     step: "2. Preparation",
     // description: "We prepare your development environment and ensure all dependencies are compatible with Vue 3. This includes upgrading build tools and making necessary project configurations to support the migration.",
-    description: "This step involves upgrading your build tools, updating dependencies to ensure compatibility with Vue 3, and configuring your project settings. We'll help you set up a parallel environment where you can test the new Vue 3 features without affecting your production environment. Ensuring that all third-party libraries and tools used in your project are compatible with Vue 3 is vital. This may involve finding alternatives for packages that are no longer supported or updating configurations to meet the new standards.",
+    description:
+      "This step involves upgrading your build tools, updating dependencies to ensure compatibility with Vue 3, and configuring your project settings. We'll help you set up a parallel environment where you can test the new Vue 3 features without affecting your production environment. Ensuring that all third-party libraries and tools used in your project are compatible with Vue 3 is vital. This may involve finding alternatives for packages that are no longer supported or updating configurations to meet the new standards.",
     icon: "🛠️",
   },
   {
     step: "3. Migration",
-    description: "This step involves systematically updating your components, directives, and other Vue 2 specific syntax to align with Vue 3's new API. We prioritize maintaining the functionality of your application while refactoring to use Vue 3's features, such as the Composition API, Teleport, and new lifecycle hooks.",
+    description:
+      "This step involves systematically updating your components, directives, and other Vue 2 specific syntax to align with Vue 3's new API. We prioritize maintaining the functionality of your application while refactoring to use Vue 3's features, such as the Composition API, Teleport, and new lifecycle hooks.",
     icon: "⚙️",
   },
   {
     step: "4. Testing",
-    description: "We conduct comprehensive testing to ensure your application works seamlessly after the migration. This includes optimizing performance to leverage the speed and efficiency improvements in Vue 3.",
+    description:
+      "We conduct comprehensive testing to ensure your application works seamlessly after the migration. This includes optimizing performance to leverage the speed and efficiency improvements in Vue 3.",
     icon: "✅",
   },
   {
     step: "5. Deployment",
-    description: "We handle the deployment to ensure a smooth transition to Vue 3 with minimal downtime. Post-migration, we offer support to address any issues and optimize performance further.",
+    description:
+      "We handle the deployment to ensure a smooth transition to Vue 3 with minimal downtime. Post-migration, we offer support to address any issues and optimize performance further.",
     icon: "🚀",
   },
 ];
@@ -55,45 +64,35 @@ const migrationSteps = [
 <section class="benefits-section py-8">
   <h2 class="text-3xl font-bold text-center mb-6">Why Migrate to Vue 3?</h2>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-    {benefits.map((benefit) => (
-      <div class="benefit-card p-4 border rounded shadow-lg">
-        <div class="icon text-3xl mb-4">{benefit.icon}</div>
-        <h3 class="text-xl font-semibold mb-2">{benefit.title}</h3>
-        <p class="text-gray-600">{benefit.description}</p>
-      </div>
-    ))}
+    {
+      benefits.map((benefit) => (
+        <div class="benefit-card p-4 border rounded shadow-lg">
+          <div class="icon text-3xl mb-4">{benefit.icon}</div>
+          <h3 class="text-xl font-semibold mb-2">{benefit.title}</h3>
+          <p class="text-gray-600">{benefit.description}</p>
+        </div>
+      ))
+    }
   </div>
 </section>
 
-<!-- <section class="migration-process-section py-8">
-    <h2 class="text-2xl font-bold text-center mb-6">How the Migration Process Works</h2>
-    <ul class="space-y-6 max-w-2xl mx-auto">
-        {migrationSteps.map((step) => (
-        <li class="flex items-start">
-            <div class="text-3xl mr-4">{step.icon}</div>
-            <div>
-            <h3 class="text-xl font-semibold">{step.step}</h3>
-            <p class="text-gray-600">{step.description}</p>
-            </div>
-        </li>
-        ))}
-    </ul>
-</section> -->
-
-<section class="migration-process-section py-12 bg-gray-50">
-    <h2 class="text-3xl font-bold text-center mb-10">How the Migration Process Works</h2>
-    <div class="space-y-12">
-      {migrationSteps.map((step) => (
+<section class="migration-process-section py-12">
+  <h2 class="text-3xl font-bold text-center mb-10">
+    How the Migration Process Works
+  </h2>
+  <div class="space-y-12">
+    {
+      migrationSteps.map((step) => (
         <div class="flex flex-col md:flex-row items-center">
           <div class="text-5xl mb-4 md:mb-0 md:w-1/4 flex justify-center">
             {step.icon}
           </div>
           <div class="md:w-3/4 px-6">
             <h3 class="text-2xl font-semibold mb-3">{step.step}</h3>
-            <p class="text-lg text-gray-700" set:html={step.description}></p>
+            <p class="text-lg text-gray-700" set:html={step.description} />
           </div>
         </div>
-      ))}
-    </div>
-  </section>
-  
+      ))
+    }
+  </div>
+</section>
