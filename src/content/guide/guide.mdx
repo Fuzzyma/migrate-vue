@@ -1,0 +1,147 @@
+---
+draft: false
+title: Guide to Upgrading from Vue 2 to Vue 3
+snippet: "Upgrading a Vue 2 codebase to Vue 3 is a significant project that requires a methodical approach. This guide covers everything you need to know, from the initial assessment of your codebase, understanding potential difficulties, upgrading third-party component libraries, leveraging TypeScript for a safer transition, deciding between the Options API and Composition API, and finally, upgrading your tooling from Vue CLI to Vite. This guide will also provide detailed examples and considerations to help ensure a smooth upgrade."
+publishDate: "2024-08-22 20:53"
+image:
+  {
+    src: "https://images.unsplash.com/photo-1542393545-10f5cde2c810?&fit=crop&w=430&h=240",
+    alt: "typography",
+  }
+category: "Technology"
+author: "Ulrich-Matthias Schäfer"
+tags: [vue, guide, vue3, vue2]
+---
+
+Upgrading a Vue 2 codebase to Vue 3 is a significant project that requires a methodical approach. This guide covers everything you need to know, from the initial assessment of your codebase, understanding potential difficulties, upgrading third-party component libraries, leveraging TypeScript for a safer transition, deciding between the Options API and Composition API, and finally, upgrading your tooling from Vue CLI to Vite. This guide will also provide detailed examples and considerations to help ensure a smooth upgrade.
+
+### 1. Assessment of the Current Codebase
+
+Before you begin the upgrade process, it's crucial to thoroughly assess your existing Vue 2 codebase. This assessment will help you identify the areas that will require the most attention during the upgrade.
+
+#### 1.1. Identify Dependencies
+
+The first step is to review your `package.json` file to list all the dependencies related to Vue. This includes:
+
+- **Vue and Vue-related Packages**:
+
+  - Check for the core Vue package (`vue`) and its template compiler (`vue-template-compiler`).
+  - Identify other essential Vue packages like `vue-router`, `vuex`, `vue-meta`, and any plugins you might be using such as `vue-i18n` for internationalization, or `vue-axios` for HTTP requests.
+  - Don't forget to check for third-party UI component libraries like Vuetify, Element UI, or BootstrapVue, which may have specific Vue 2 versions.
+
+- **Utility Libraries**:
+  - Look for utility libraries that may interact closely with Vue, such as `vue-class-component` and `vue-property-decorator` if you're using class-based components.
+  - Identify testing libraries like `@vue/test-utils`, Jest, or Cypress that will need to be updated to versions compatible with Vue 3.
+  - Examine any state management or global store libraries like Vuex and ensure they have Vue 3 compatible versions.
+
+```json
+{
+  "dependencies": {
+    "vue": "^2.6.11",
+    "vue-router": "^3.1.5",
+    "vuex": "^3.1.2",
+    "vuetify": "^2.3.10",
+    "axios": "^0.19.2",
+    "vue-i18n": "^8.15.3"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^4.5.0",
+    "@vue/test-utils": "^1.0.0-beta.31",
+    "jest": "^26.0.0"
+  }
+}
+```
+
+- **Obsolete or Incompatible Libraries:**:
+  - Identify any obsolete packages or libraries that haven’t been maintained or updated in a long time. These libraries may not work with Vue 3 and will need to be replaced.
+  - Evaluate the frequency of updates and community support for the libraries you depend on. A library with a stagnant development cycle could pose a risk during the upgrade.
+
+#### 1.2. Analyze the Use of APIs
+
+The next step is to analyze how your current codebase utilizes various Vue 2 APIs. This analysis will help you understand the scope of changes required to make your code compatible with Vue 3.
+
+- **Global Vue APIs**
+  - Examine how your application initializes and configures the Vue instance. Vue 3 introduces `createApp`, which replaces the global Vue instance methods such as `Vue.component`, `Vue.use`, and `Vue.mixin`.
+  - Identify all occurrences of `Vue.prototype` extensions. These will need to be refactored, as Vue 3 handles global properties differently.
+
+```js
+// Vue 2 example
+import Vue from "vue";
+import App from "./App.vue";
+
+Vue.component("my-component", MyComponent);
+
+new Vue({
+  render: (h) => h(App),
+}).$mount("#app");
+
+// Vue 3 equivalent
+import { createApp } from "vue";
+import App from "./App.vue";
+import MyComponent from "./components/MyComponent.vue";
+
+const app = createApp(App);
+app.component("my-component", MyComponent);
+app.mount("#app");
+```
+
+- **Filters**
+  - Filters have been removed in Vue 3. If your application relies heavily on filters, you will need to refactor this logic into computed properties, methods, or a dedicated utility function.
+
+```js
+// Vue 2 filter usage
+Vue.filter("capitalize", function (value) {
+  if (!value) return "";
+  value = value.toString();
+  return value.charAt(0).toUpperCase() + value.slice(1);
+});
+
+{
+  {
+    message | capitalize;
+  }
+}
+
+// Vue 3 alternative using computed properties or methods
+const capitalize = (value) => {
+  if (!value) return "";
+  value = value.toString();
+  return value.charAt(0).toUpperCase() + value.slice(1);
+};
+```
+
+- **Custom Events**
+  - Vue 2 allows components to emit custom events using `$emit`, and parent components listen using `$on` or directly through the template. In Vue 3, `$on`, `$off`, and `$once` have been removed, and you'll need to handle custom events using native JavaScript events or refactor to use `emit` within the setup function.
+
+```js
+// Vue 2
+this.$emit("custom-event", data);
+
+// Vue 3
+import { defineComponent, ref } from "vue";
+
+export default defineComponent({
+  setup(props, { emit }) {
+    const triggerEvent = () => {
+      emit("custom-event", data);
+    };
+    return { triggerEvent };
+  },
+});
+```
+
+#### 1.3. Review Component Libraries
+
+Component libraries are often a significant part of Vue applications. You need to carefully evaluate whether these libraries are compatible with Vue 3 and, if not, what alternatives are available.
+
+- Check Compatibility:
+
+  - Go through the documentation or repositories of each library to verify if they offer a Vue 3 compatible version. If a library hasn’t been updated for Vue 3, check if there’s a beta or alpha version available, or a roadmap indicating future support.
+
+- Assess the Impact of Replacement:
+
+  - If you find that a library won’t be supporting Vue 3 anytime soon, consider the impact of replacing it. Estimate the effort required to rewrite the components using a new library or creating custom components to replace them.
+    Evaluate whether the library's feature set is critical to your application or if you can simplify or eliminate its use altogether.
+
+- Plan for Progressive Replacement:
+  - For large projects, consider a progressive replacement approach where you replace or refactor components incrementally rather than in a single massive update. This reduces the risk and allows for easier testing and validation.
