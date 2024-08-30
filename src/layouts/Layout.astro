@@ -4,6 +4,7 @@ import Footer from "@components/footer.astro";
 import Navbar from "@components/navbar/navbar.astro";
 import "@fontsource-variable/inter/index.css";
 import "@fontsource-variable/bricolage-grotesque";
+import src from "@assets/hero-image-new.webp";
 
 export interface Props {
   title: string;
@@ -31,7 +32,7 @@ const makeTitle = title
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- <link rel="preload" as="image" href={src} alt="Hero" /> -->
+    <link rel="preload" as="image" href={src.src} />
     <SEO
       title={makeTitle}
       description="Learn how to migrate your Vue codebase to Vue 3"
