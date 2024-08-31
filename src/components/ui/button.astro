@@ -23,7 +23,7 @@ const sizes = {
 const styles = {
   outline: "border-2 border-black hover:bg-black text-black hover:text-white",
   primary:
-    "bg-black text-white hover:bg-slate-900  border-2 border-transparent",
+    "bg-[#41B883] text-white hover:bg-[#34495E] border-2 border-transparent",
 };
 ---
 
@@ -35,6 +35,6 @@ const styles = {
     sizes[size],
     styles[style],
     className,
-  ]}
-  ><slot />
+  ]}>
+  <slot />
 </button>
