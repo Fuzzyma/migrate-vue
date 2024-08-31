@@ -1,4 +1,7 @@
 ---
+import { Icon } from "astro-icon/components";
+import Link from "./ui/link.astro";
+
 const benefits = [
   {
     title: "Performance Improvements",
@@ -96,4 +99,18 @@ const migrationSteps = [
       ))
     }
   </div>
+</section>
+
+<section class="py-12 flex items-center flex-col gap-6">
+  <h2 class="text-3xl font-bold text-center mb-4">Ready to migrate?</h2>
+  <p>
+    Upgrade to a more robust, efficient, and maintainable app with Vue 3 now!
+  </p>
+  <Link
+    size="lg"
+    href="/pricing"
+    class="flex gap-1 items-center justify-center">
+    <Icon class="text-white w-5 h-5" name="mdi:coins" />
+    Check our prices
+  </Link>
 </section>
