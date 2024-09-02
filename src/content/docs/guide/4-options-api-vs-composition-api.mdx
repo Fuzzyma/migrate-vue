@@ -1,0 +1,53 @@
+---
+draft: true
+title: Options Api vs Composition Api
+description: The current recommended way to write Vue components is by using the Composition Api with script setup. However, some people still prefer the Options Api or don't want to migrate their code. This guide will help you make an informed decision.
+tags: [vue, guide, vue3, vue2, options-api, composition-api]
+head:
+  - tag: title
+    content: "Guide: Options Api vs Composition Api | migrate-vue"
+---
+
+Before diving headfirst into refactoring your entire codebase with the Composition Api, it's worth pausing to consider whether you really need it. While the Composition Api is one of the most talked-about features of Vue 3, it’s not necessarily a must-have for every project.
+
+### Understanding the Upsides and Downsides
+
+The Composition Api offers a more flexible and powerful way to organize your code, especially in large applications. It allows you to encapsulate logic in a way that is reusable and easy to test. However, it comes with a learning curve, particularly for teams accustomed to the Options Api. There's also the question of verbosity; some developers find the Composition Api less readable, especially for smaller components.
+
+Aside from personal preference, the main reason not to switch is cost. All developments in the Vue ecosystem are targeted towards the Composition Api. A good example is [VueUse](https://vueuse.org/), which provides a vast set of utilities that are easy to integrate.
+
+So, while the Options Api is still fully supported, you may miss out on newer developments and innovations.
+
+:::tip[Pro Tip]
+For new projects or when starting fresh with Vue 3, consider the Composition Api. However, for existing projects heavily invested in the Options Api, weigh the benefits against the time and effort required for refactoring.
+:::
+
+#### Options Api Pros
+
+- **No need to migrate**
+- Preferred by some developers
+- Declarative (like writing a config file)
+
+#### Composition Api Pros
+
+- More efficient
+- Easier to maintain
+- Easier to share and reuse code with composables
+- Better type inference
+- Smaller production bundle and less overhead
+- Procedural (like programming)
+- Innovation happens here (e.g., `script setup`)
+
+:::tip
+[vueschool.io](https://vueschool.io/articles/vuejs-tutorials/options-api-vs-composition-api/) wrote an excellent article comparing both Apis. There is also an article on this topic from the Vue team itself that you can find [here](https://vuejs.org/guide/extras/composition-api-faq.html).
+:::
+
+### Food for thought
+
+Choosing between the Composition Api and the Options Api isn't just a technical decision—it's a strategic one.
+Consider your project's size, the complexity of your codebase, your team's familiarity with Vue, and the potential learning curve.
+Make the choice that aligns best with your project's needs and your team's skills.
+
+:::note[Opinion]
+In most cases, it is absolutely worth migrating to the Composition Api. It is more maintainable and allows for greater flexibility. If you don't want to do it now or only want to do it partially, that is a valid choice. However, my recommendation is to migrate to the Composition Api as soon as possible.
+:::

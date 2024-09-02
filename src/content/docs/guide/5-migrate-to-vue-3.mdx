@@ -1,0 +1,58 @@
+---
+draft: true
+title: Migrate to Vue 3
+description: "This guide walks you through migrating a Vue 2 app to Vue 3, covering essential steps like setting up tooling, updating libraries, refactoring components, and leveraging the Vue-compat build for a smooth transition."
+tags: [vue, guide, vue3, vue2]
+head:
+  - tag: title
+    content: "Guide: Migrate to Vue 3 | migrate-vue"
+---
+
+## Prerequisites
+
+Before starting the migration process, ensure you have a comprehensive understanding of the current state of your Vue 2 codebase. This involves identifying the Vue 2 features and component libraries in use. A preliminary review of your project structure and dependencies will help you determine the complexity of the migration. You should also familiarize yourself with the [Guide: Getting Started](#getting-started), which provides a foundation for understanding the core differences between Vue 2 and Vue 3.
+
+### 1. Setting Up the Vue-Compat Build and ESLint
+
+To begin the migration, it is essential to set up the necessary tooling. The Vue-compat build is a transitional build that allows Vue 2 and Vue 3 code to coexist, making it possible to upgrade incrementally. Start by installing the Vue-compat package using npm:
+
+```bash
+npm install @vue/compat
+```
+
+Next, configure ESLint to help catch potential compatibility issues during development. This involves installing the ESLint plugin for Vue and adjusting your ESLint configuration to extend the recommended settings for Vue 3:
+
+```json
+{
+  "extends": ["plugin:vue/vue3-recommended"],
+  "plugins": ["vue"]
+}
+```
+
+The Vue-compat build functions as a bridge, enabling you to use new Vue 3 features while still supporting existing Vue 2 code. This approach minimizes disruptions and allows for a gradual migration process.
+
+### 2. Utilizing the Vue-Compat Guide
+
+Following the official Vue-compat guide is crucial for a successful migration. This guide provides detailed instructions and best practices for utilizing the Vue-compat build. You can find the guide [here](https://github.com/vuejs/core/tree/main/packages/vue-compat#readme). Once your application runs successfully with the Vue-compat build, you can consider using it in a production environment while incrementally introducing Vue 3 features in new components or pages.
+
+### 3. Updating Third-Party Component Libraries
+
+Upgrading third-party component libraries is a key part of the migration process. Begin by reviewing the documentation for each library to determine their compatibility with Vue 3. Many libraries provide their own migration guides, which should be followed closely.
+
+If a library does not support Vue 3, you will need to either find an alternative that does or upgrade to a version that is compatible. In cases where there are no suitable alternatives, you might need to rewrite certain components or features using native Vue 3 components. Throughout this process, thorough testing is essential to ensure that updated or replaced components work correctly within your application.
+
+### 4. Refactoring Your Own Components
+
+With third-party libraries updated, you can focus on migrating your own components. The Vue-compat build allows for an incremental approach, enabling you to enable or disable specific Vue 2 features on a per-component basis. This flexibility makes it easier to refactor components gradually.
+
+Aim to remove all Vue 2-specific features from your components over time, transitioning fully to Vue 3. Depending on the size of your project, you might consider batch upgrading components and globally disabling the Vue 2 compatibility flag once you feel confident in the stability of the migrated components. This strategy can help accelerate the migration process.
+
+### 5. Frequently Asked Questions (FAQ)
+
+#### Can I Migrate if I Use the Vue Runtime Build with DOM Templates?
+
+Yes, it is possible to migrate even if you are using the Vue runtime build with DOM templates. The Vue-compat build supports this setup, but you will need to refactor your templates to align with Vue 3 syntax and best practices. However, it might be time to move on to the recommended setup: Single File Components. Learn more about why you [might want to avoid DOM templates](https://vuejsdevelopers.com/2017/09/17/vue-js-avoid-dom-templates/).
+
+#### Can I keep adding features while migrating?
+
+Absolutely! The Vue-compat build allows you to maintain a mix of Vue 2 and Vue 3 code, so you can progressively introduce Vue 3 features in new components or parts of your application while still running existing Vue 2 code.

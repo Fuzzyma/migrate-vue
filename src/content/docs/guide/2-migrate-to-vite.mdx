@@ -1,0 +1,205 @@
+---
+draft: true
+title: Migrate to Vite
+description: When migrating your codebase to Vue 3, it is advisable to also update your toolchain to Vite. This will speed up your development process and simplify configuration.
+tags: [vue, guide, vue3, vue2, vite, migration]
+head:
+  - tag: title
+    content: "Guide: Migrate to Vite | migrate-vue"
+---
+
+When migrating your codebase to Vue 3, it is advisable to also update your toolchain to Vite. This transition will accelerate your development process and simplify configuration. Additionally, it facilitates the migration of your codebase to TypeScript, as Vite supports TypeScript out of the box.
+
+This guide will walk you through the process of refactoring a Vue application from Vue CLI to Vite.
+
+## Initial Setup
+
+To begin, let's set up a new Vite project as a reference.
+
+### 1. Create a New Vite Project
+
+Navigate to your project directory and create a new Vite project:
+
+```bash
+npx create-vite vue-3-reference
+cd vue-3-reference
+```
+
+When prompted, choose Vue and (if you're using TypeScript) TypeScript. Open the project to familiarize yourself with the project structure in Vite.
+
+## Migrating Project Files
+
+When migrating a Vue 3 project, you can go ahead and move your `src` directory, along with any other core assets (like `public`), from your old Vue CLI project to the new Vite project.
+
+```diff
+// Old Structure
+my-old-vue2-app/
+├── src/
+├── public/
+├── vue.config.js
+└── package.json
+
+// New Structure
+my-vue3-app/
+├── src/
+├── public/
+├── vite.config.js
+└── package.json
+```
+
+If you are still on Vue 2, it is recommended to install Vite directly in your existing project:
+
+## Updating Configuration
+
+### 2. Replace `vue.config.js` with `vite.config.js`
+
+Vite uses `vite.config.js` (or `vite.config.ts` if you prefer TypeScript) for its configuration. Here's how you can replace your existing `vue.config.js` with `vite.config.js`.
+
+**Before (vue.config.js):**
+
+```js
+// vue.config.js
+module.exports = {
+  devServer: {
+    port: 8080,
+    proxy: "http://localhost:3000",
+  },
+  configureWebpack: {
+    plugins: [new SomeWebpackPlugin()],
+  },
+};
+```
+
+**After (vite.config.js):**
+
+```js
+// vite.config.js
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue2";
+import someVitePlugin from "vite-plugin-some";
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [vue(), someVitePlugin()],
+  server: {
+    port: 8080,
+    proxy: {
+      "/api": "http://localhost:3000",
+    },
+  },
+});
+```
+
+### 3. Handling Aliases
+
+Webpack aliasing is different from Vite's aliasing system. If you used aliases in your `vue.config.js`, update them in `vite.config.js`.
+
+**Before (vue.config.js):**
+
+```js
+// vue.config.js
+const path = require("path");
+
+module.exports = {
+  chainWebpack: (config) => {
+    config.resolve.alias.set("@", path.resolve(__dirname, "src"));
+  },
+};
+```
+
+**After (vite.config.js):**
+
+```js
+// vite.config.js
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue2";
+import { resolve } from "path";
+
+export default defineConfig({
+  plugins: [vue()],
+  resolve: {
+    alias: {
+      "@": resolve(__dirname, "src"),
+    },
+  },
+});
+```
+
+## Handling Common Webpack Loaders
+
+### 4. Removing or Replacing Webpack Loaders
+
+Webpack projects often use various loaders to handle different file types. In Vite, many of these loaders are either built-in or replaced by plugins. Here are some common loaders and their Vite equivalents:
+
+- **Babel Loader**: Vite uses ESBuild for fast transpiling. Remove any Babel-loader configuration.
+
+  ```bash
+  npm remove babel-loader @babel/core @babel/preset-env
+  ```
+
+  Instead, Vite handles modern JavaScript and TypeScript out of the box.
+
+- **CSS/Sass/SCSS Loader**: Vite natively supports CSS and preprocessors like Sass and SCSS.
+
+  If you were using `sass-loader` or `style-loader`, remove them from `package.json` and ensure you have the necessary pre-processor installed:
+
+  ```bash
+  npm remove sass-loader style-loader
+  npm install sass --save-dev
+  ```
+
+- **File Loader and URL Loader**: Vite handles static assets differently. Static assets in Vite can be imported as modules or placed in the `public` directory.
+
+  If your webpack configuration used `file-loader` or `url-loader`, remove them:
+
+  ```bash
+  npm remove file-loader url-loader
+  ```
+
+  Adjust any asset paths as needed to follow Vite's conventions.
+
+## Dependency Updates
+
+### 5. Update Package Dependencies
+
+Replace Vue CLI and Webpack dependencies with Vite-compatible ones. Remove `@vue/cli-*` packages and install `vite` and `@vitejs/plugin-vue2`.
+
+```bash
+npm remove @vue/cli-service webpack webpack-cli
+npm install vite @vitejs/plugin-vue2 --save-dev
+```
+
+## Noteworthy Differences and Edge Cases
+
+### 6. CSS and Asset Handling
+
+Vite handles CSS and other assets differently than Webpack. Ensure all asset paths are relative or use base URLs correctly. Static assets can be placed in the `public` directory, which Vite serves at the root.
+
+### 7. Environment Variables
+
+Vite uses different environment variables than Vue CLI. Convert `.env` files to match Vite's naming conventions (`VITE_` prefix).
+
+```diff
+// .env
+-VUE_APP_API_URL=https://api.example.com
++VITE_API_URL=https://api.example.com
+```
+
+### 8. Unsupported Vue CLI/Webpack Features
+
+Certain Webpack-specific features, like `require.context`, do not have direct equivalents in Vite. Rewrite such parts of the codebase to use Vite's native import or dynamic import features.
+
+### 9. Vue Router and Vuex
+
+If you're using Vue Router or Vuex, they generally work the same way, but ensure all imports are compatible with ES module syntax.
+
+```js
+// Update imports to ES module syntax if needed
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Vuex from "vuex";
+```
+
+## Testing and Linting
+
+If you use Jest or other testing frameworks, make sure to update their configurations to work with Vite. You may also consider switching to [Vitest](https://vitest.dev/).

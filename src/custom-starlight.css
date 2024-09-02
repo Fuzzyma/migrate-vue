@@ -1,0 +1,26 @@
+:root[data-theme="light"] {
+  /* height: var(--sl-nav-height); */
+  /* --sl-color-hairline-shade: transparent; */
+  /* border-bottom: 1px solid var(--sl-color-hairline-shade); */
+  --sl-nav-pad-x: 0px;
+  --sl-nav-pad-y: 0px;
+  /* padding: var(--sl-nav-pad-y) var(--sl-nav-pad-x); */
+  /* padding-inline-end: var(--sl-nav-pad-x); */
+  --sl-color-bg-nav: white;
+  /* background-color: var(--sl-color-bg-nav); */
+  --sl-nav-height: 81px;
+  /* --sl-sidebar-width: 0px; */
+  --sl-text-h1: 1.875rem;
+  --sl-text-h2: 1.5rem;
+  --sl-text-h3: 1.25rem;
+  --sl-text-h4: 1.125rem;
+  --sl-text-h5: 1rem;
+  --sl-text-h6: 0.875rem;
+}
+
+.sl-markdown-content ul {
+  padding-left: 2rem;
+}
+.sl-markdown-content li {
+  list-style-type: disc;
+}

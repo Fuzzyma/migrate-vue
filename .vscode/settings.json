@@ -1,3 +1,4 @@
 {
-  "prettier.documentSelectors": ["**/*.astro"]
+  "prettier.documentSelectors": ["**/*.astro"],
+  "css.customData": [".vscode/tailwind.json"]
 }

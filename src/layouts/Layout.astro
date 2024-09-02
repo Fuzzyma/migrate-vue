@@ -33,6 +33,27 @@ const makeTitle = title
     <meta name="generator" content={Astro.generator} />
 
     <link rel="preload" as="image" href={src.src} />
+
+    <!-- Google Tag Manager via Anogate -->
+    <script type="text/plain" data-anogate="GTM">
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-N3R7DHWT");
+    </script>
+    <script
+      src="https://load01.anogate.io/js/?id=AG-31F914ALD1"
+      async
+      id="Anogate">
+    </script>
+    <!-- End Google Tag Manager via Anogate -->
+
     <SEO
       title={makeTitle}
       description="Learn how to migrate your Vue codebase to Vue 3"

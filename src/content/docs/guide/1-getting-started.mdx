@@ -1,0 +1,164 @@
+---
+draft: true
+title: Getting started
+description: Assessing your Vue 2 codebase is crucial to ensure a smooth migration. This guide will help you identify areas of your code that need updating.
+tags: [vue, guide, vue3, vue2]
+prev: false
+head:
+  - tag: title
+    content: "Guide: Getting started | migrate-vue"
+---
+
+## 1. Analyzing Vue 2 Features Used
+
+Vue 3 introduces several breaking changes and new paradigms that might affect your existing codebase.
+Therefore, it is a good idea to review the features used in your codebase as a starting point.
+This analysis will help define the scope of changes required to make your code compatible with Vue 3 and serve as a useful reference for future steps.
+
+### Options API
+
+If your components primarily use the Options Api, consider refactoring to the Composition Api, especially for larger applications. This refactoring is optional but can offer more flexibility and maintainability.
+However, it can consume a lot of resources and might not always be the best choice (see [Options API vs. Composition API](/guide/4-options-api-vs-composition-api)).
+This step can be done later, component by component if needed, or as a first step by utilizing [script setup](https://vuejs.org/api/sfc-script-setup), which has been available since Vue 2.7.
+
+:::note[Opinion]
+Upgrading components to `script setup` right away makes it easier to update them to Vue 3 later on.
+I recommend doing this even if it is not strictly necessary.
+:::
+
+### v-model
+
+Vue 3 changed the default prop/event combination for `v-model` from `:value`/`@input` to `modelValue`/`@update:modelValue`.
+It is required to update all occurrences on **custom components** that uses `v-model`.
+`<input>` and other form elements still use the native prop and event combination, e.g., `:value` and `@input`.
+
+### `Vue.set()` / `this.$set()`
+
+Vue 2 was based on `getters` and `setters` and could not track changes in an object directly.
+Therefore, it was necessary to explicitly "tell" Vue by using `Vue.set()` or `this.$set()`.
+However, Vue 3 uses proxies, so this is no longer required.
+These methods can be safely replaced with a normal assignment, e.g., `obj.foo = 'bar'`.
+
+### Deprecated `slot` / `slot-scope` syntax
+
+In Vue 2.6, a new syntax for slots and scoped slots was introduced, and `slot` / `slot-scope` was deprecated.
+If you still use the old syntax in your code, you must update it to the new syntax while migrating to Vue 3.
+This is also required for the vue-compat build to work (see [Setting Up the Vue-Compat Build and ESLint](/guide/5-migrate-to-vue-3#1-setting-up-the-vue-compat-build-and-eslint)).
+
+### Filters
+
+Filters in Vue 2 were a convenient way to format text and data in templates, but they have been removed in Vue 3. If your codebase heavily relies on filters, you will need to refactor them into computed properties or methods.
+
+```js
+import { computed } from "vue";
+
+const filteredItems = computed(() => {
+  return items.filter((item) => item.name.includes(searchTerm.value));
+});
+```
+
+### Custom Directives
+
+Custom directives are still supported in Vue 3. However, some changes might be required depending on how you use them.
+Vue 3 introduces a new lifecycle hook, `beforeUnmount`, and changes the signature for directive hooks.
+If your application relies on custom directives for significant DOM manipulations, you'll need to update these hooks to match the new API.
+While you're at it, you might want to consider removing directives altogether.
+There are some [rumors about custom directives being deprecated](https://youtu.be/xvkf3KOaRlQ?si=JAoLrkEX-p31NOQ2&t=1260) in later versions of Vue 3.
+Most of the time, a component can accomplish the same task more effectively.
+
+### Mixins
+
+Mixins are a powerful feature in Vue 2 for reusing code across components, but they have been increasingly discouraged in favor of the Composition API in Vue 3.
+The Composition API provides a more explicit and organized way to reuse code without the "implicit magic" that can make mixins hard to debug and maintain.
+If your application relies on mixins, plan to refactor this shared logic into composables.
+Composables are functions that encapsulate reactive state and logic and can be imported and reused across components, providing a clearer and more modular approach to code reuse.
+
+### Event Bus ($on, $off, $emit)
+
+In Vue 2, it is common to use an event bus and component events to pass data around.
+However, in Vue 3, component events were replaced by `$emit` and binding to events via `v-on`.
+A global event bus can still be used but often leads to hard-to-maintain, spaghetti code.
+Therefore, you should consider using a different state management solution like Pinia for more complex scenarios.
+If your codebase heavily relies on an event bus, it might seem easier to leave it as is, but future developers will appreciate you untangling the mess that an event bus introduces.
+
+## 2. Checking Dependencies
+
+We have covered all of Vue's core features; however, Vue plugins, component libraries, state management solutions, etc., often need to be updated alongside Vue. You need to check which dependencies are incompatible with Vue 3 and update them accordingly. Many libraries have their own migration paths that you should follow.
+
+Here is a list of common dependencies used in Vue projects:
+
+- Vue: The core of the framework. You should definitely read their [migration guide](https://v3-migration.vuejs.org/) even if some information might be redundant. To help with migration, Vue comes with a [compatibility build](https://www.npmjs.com/package/@vue/compat) (also see [Setting Up the Vue-Compat Build and ESLint](/guide/5-migrate-to-vue-3#1-setting-up-the-vue-compat-build-and-eslint)).
+- Vue Router: Almost every project uses it. Follow the [migration guide](https://router.vuejs.org/guide/migration/index.html).
+- Vuex: Version 4 brings support for Vue 3. Refer to its [migration guide](https://vuex.vuejs.org/guide/migration.html).
+- Vuetify: Officially supported in Vue 3 after a long wait. It also has its own [migration guide](https://vuetifyjs.com/en/getting-started/upgrade-guide/) and an extra [eslint-plugin](https://www.npmjs.com/package/eslint-plugin-vuetify/) to ease the transition.
+- Element UI: Supported via Element Plus. A guide can be found [here](https://element-plus.org/en-US/guide/migration).
+- Quasar: Version 2 supports Vue 3 and has a dedicated guide [here](https://quasar.dev/start/upgrade-guide).
+- Bootstrap Vue: Tips for migrating can be found [here](https://bootstrap-vue.org/vue3).
+- Bundler: Consider switching to `Vite` if you still use `vue-cli` or `webpack` (see [Migrate to Vite](/guide/2-migrate-to-vite)).
+
+:::tip[Good to know]
+The official recommendation for a state management library for Vue 3 has changed to [Pinia](https://pinia.vuejs.org).
+Check it out and see if a migration is feasible. A guide is available [here](https://pinia.vuejs.org/cookbook/migration-vuex.html).
+:::
+
+:::note
+While you're updating dependencies, consider updating others as well. Some libraries might become smaller, fix bugs, or add new features. In any case, it will increase your programmers' happiness ;). This is also a perfect time to reconsider your bundler strategy (see [Migrate to Vite](/guide/2-migrate-to-vite)).
+:::
+
+## 3. Reviewing Component Libraries
+
+Component libraries are a crucial part of many Vue applications,
+and their compatibility with Vue 3 can significantly impact your migration strategy.
+In some cases, older libraries are no longer maintained and need to be replaced. Sometimes a migration path exists.
+
+**Assessing Compatibility and Migration Paths**
+
+Not all libraries have full support for Vue 3 yet.
+Check the documentation or repositories of each library to see if they provide a Vue 3-compatible version or an official migration guide.
+
+If a component library is no longer maintained or does not offer a clear migration path to Vue 3, consider alternatives.
+Look for libraries with similar aesthetics or functionality that are compatible with Vue 3.
+
+Also, consider whether the components can be replaced with your own components instead.
+
+**Deciding Whether to Replace or Rewrite**
+
+In cases where a library is not migratable, you have a choice: replace the library entirely or rewrite the necessary components.
+Replacing a library might be straightforward if it mostly provides simple, styled components or utilities like grids, containers, or basic forms.
+In many cases, a simple `<div>` with some styling is all that's required.
+
+However, more interactive components such as inputs, buttons, or modals might require more effort to replace.
+Rewriting these components or finding direct replacements that mimic their API and style can be time-consuming and could introduce bugs or require additional testing.
+
+:::tip[Tip]
+For simple components like grids or styled containers, consider swapping them with a custom component or equivalents from another library.
+For more complex components like modals or form inputs, weigh the effort required to adapt or replace them against the benefits of a new library.
+:::
+
+**Considering the Effort and Benefits of a New Library**
+
+When considering a switch to a different library, factor in the effort involved in re-styling and re-testing your application. Even if the new library offers a similar look and feel, minor differences in component behavior or style could require additional adjustments across your codebase.
+This can often result in significant effort to make your codebase "work again" and can tie up a lot of resources.
+
+**Making an Informed Decision**
+
+The decision to replace a component library should be made carefully. Consider the effort required for refactoring against the long-term maintainability and benefits of using a supported and actively maintained library. Sometimes, the effort spent upfront to switch to a better-supported library will save you time and headaches in the future.
+
+:::tip[Opinion]
+If you are only using a few components from a library, consider replacing it entirely with custom components.
+In many cases, it is not worth buying into a library, especially if it comes with a huge dependency tree.
+Some libraries might also put a burden on your developers machine by using expensive types.
+They can also massively increase bundle time since **all** their components need to get transpiled.
+In this regard it might be useful to have a look at [shadcn-vue](https://www.shadcn-vue.com/) that lets you bring in any component you need as a file that you have control over.
+:::
+
+## 4. TypeScript
+
+TypeScript can significantly aid in migrating a larger codebase, especially when moving to Vue 3.
+Most component libraries now support TypeScript, providing immediate feedback if props are incorrect or missing, which helps catch many bugs early that might otherwise go unnoticed.
+Additionally, TypeScript is valuable in everyday development, and many developers prefer it over plain JavaScript today.
+
+However, transitioning an entire codebase to TypeScript can be challenging. If you're not already using TypeScript and don't intend to, the migration effort might not be justified.
+But if TypeScript should become part of your stack, **now** is an opportune time to fully integrate it.
+
+For more details, refer to [Migrate to TypeScript](/guide/3-migrate-to-typescript).

@@ -1,0 +1,138 @@
+---
+title: Migrate Vue 2 to TypeScript
+description: TypeScript can help reduce errors in your codebase. When migrating to Vue 3, it helps massively in catching bugs early.
+head:
+  - tag: title
+    content: "Guide: Migrate Vue 2 to TypeScript | migrate-vue"
+---
+
+## Install TypeScript
+
+```bash
+npm install -D typescript
+```
+
+## Create a `tsconfig.json`
+
+Create `tsconfig.json` in the root of your project folder and add the following content:
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "preserve",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+
+    /* Path aliases in case you use them */
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"]
+}
+```
+
+Ensure your aliases are set up correctly according to your Vite configuration.
+
+## Migrate Components
+
+When using TypeScript with the Options Api, it doesn't feel as natural as using it with the Composition Api.
+To type your data appropriately, you have to use return signatures or cast it to the correct type.
+
+```vue title="OptionsApi.vue"
+<template>
+  <div>
+    <h1>Options Api</h1>
+    <p>{{ msg }}</p>
+  </div>
+</template>
+
+<script lang="ts">
+import { PropType } from "vue";
+
+type MyData = {
+  msg: string;
+  items: string[];
+};
+
+export default {
+  name: "OptionsApi",
+  props: {
+    prop1: {
+      type: Object as PropType<SomeType>,
+    },
+  },
+  data(): MyData {
+    return {
+      msg: "Hello World",
+      items: [],
+    };
+  },
+  methods: {
+    hello() {
+      console.log(this.msg, this.items, this.prop1);
+    },
+  },
+};
+</script>
+```
+
+```vue title="ScriptSetup.vue"
+<template>
+  <div>
+    <h1>Script Setup</h1>
+    <p>{{ msg }}</p>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { PropType, ref } from "vue";
+
+type SomeType = {
+  foo: string;
+};
+
+const props = defineProps({
+  prop1: {
+    type: Object as PropType<SomeType>,
+  },
+});
+
+const msg = ref("Hello World");
+const items = ref<string[]>([]);
+
+const hello = () => {
+  console.log(msg.value, items.value, props.prop1);
+};
+</script>
+```
+
+:::tip[Options Api vs Script Setup]
+The decision to move to the Composition Api with script setup is also a strategic one.
+The Options Api is still fully supported under Vue 3 and will not be deprecated.
+
+If you need some help deciding, read [Options Api vs Composition Api](/guide/4-options-api-vs-composition-api).
+:::
+
+## Strategy
+
+Migrating to TypeScript can become overwhelming quickly.
+You can ease the process by migrating your components one by one.
+Focus on components that utilize external component libraries.
+This will help you later when migrating those libraries to Vue 3 since errors will become evident.
