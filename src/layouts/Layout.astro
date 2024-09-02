@@ -52,6 +52,22 @@ const makeTitle = title
     </script>
     <!-- End Google Tag Manager via Anogate -->
 
+    <!-- Google tag (gtag.js) -->
+    <script
+      is:inline
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-0BW0SM4L8W"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-0BW0SM4L8W");
+    </script>
+
     <SEO
       title={makeTitle}
       description="Learn how to migrate your Vue codebase to Vue 3"
