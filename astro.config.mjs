@@ -107,6 +107,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             id: "Anogate",
           },
         },
+        {
+          tag: "meta",
+          attrs: {
+            property: "og:image",
+            content: "https://migrate-vue.com/opengraph.jpg",
+          },
+        },
       ],
     }),
     tailwind(),
