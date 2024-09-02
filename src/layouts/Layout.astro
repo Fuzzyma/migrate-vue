@@ -32,10 +32,8 @@ const makeTitle = title
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
 
-    <link rel="preload" as="image" href={src.src} />
-
     <!-- Google Tag Manager via Anogate -->
-    <script type="text/plain" data-anogate="GTM">
+    <script type="text/plain" data-anogate="GTM" is:inline>
       (function (w, d, s, l, i) {
         w[l] = w[l] || [];
         w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
@@ -51,6 +49,7 @@ const makeTitle = title
       src="https://load01.anogate.io/js/?id=AG-31F914ALD1"
       async
       id="Anogate"
+      is:inline
     ></script>
     <!-- End Google Tag Manager via Anogate -->
 
