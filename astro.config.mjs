@@ -110,7 +110,35 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         {
           tag: "meta",
           attrs: {
-            property: "og:image",
+            property: "og:image:url",
+            content: "https://migrate-vue.com/opengraph.jpg",
+          },
+        },
+        {
+          tag: "meta",
+          attrs: {
+            property: "og:image:alt",
+            content: "migrate-vue Homepage Screenshot",
+          },
+        },
+        {
+          tag: "meta",
+          attrs: {
+            name: "twitter:card",
+            content: "summary_large_image",
+          },
+        },
+        {
+          tag: "meta",
+          attrs: {
+            name: "twitter:creator",
+            content: "@saulmurf",
+          },
+        },
+        {
+          tag: "meta",
+          attrs: {
+            name: "twitter:image",
             content: "https://migrate-vue.com/opengraph.jpg",
           },
         },

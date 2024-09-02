@@ -50,8 +50,8 @@ const makeTitle = title
     <script
       src="https://load01.anogate.io/js/?id=AG-31F914ALD1"
       async
-      id="Anogate">
-    </script>
+      id="Anogate"
+    ></script>
     <!-- End Google Tag Manager via Anogate -->
 
     <SEO
@@ -62,6 +62,7 @@ const makeTitle = title
         creator: "@saulmurf",
         // site: "@web3templates",
         card: "summary_large_image",
+        image: resolvedImageWithDomain,
       }}
       openGraph={{
         basic: {
@@ -72,6 +73,9 @@ const makeTitle = title
         },
         image: {
           alt: "migrate-vue Homepage Screenshot",
+        },
+        optional: {
+          locale: "en",
         },
       }}
     />
