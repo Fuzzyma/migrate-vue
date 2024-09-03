@@ -108,6 +108,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           },
         },
         {
+          tag: "script",
+          attrs: {
+            async: true,
+            src: "https://www.googletagmanager.com/gtag/js?id=G-0BW0SM4L8W",
+          },
+        },
+        {
+          tag: "script",
+          content: `
+window.dataLayer = window.dataLayer || [];
+function gtag() {
+  dataLayer.push(arguments);
+}
+gtag("js", new Date());
+
+gtag("config", "G-0BW0SM4L8W");`,
+        },
+        {
           tag: "meta",
           attrs: {
             property: "og:image:url",
