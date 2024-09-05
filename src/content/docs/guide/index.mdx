@@ -31,6 +31,7 @@ I recommend doing this even if it is not strictly necessary.
 Vue 3 changed the default prop/event combination for `v-model` from `:value`/`@input` to `modelValue`/`@update:modelValue`.
 It is required to update all occurrences on **custom components** that uses `v-model`.
 `<input>` and other form elements still use the native prop and event combination, e.g., `:value` and `@input`.
+{/* .sync and mode-event https://v2.vuejs.org/v2/guide/components-custom-events#Customizing-Component-v-model */}
 
 ### `Vue.set()` / `this.$set()`
 

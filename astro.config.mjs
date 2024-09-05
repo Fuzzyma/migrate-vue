@@ -56,7 +56,7 @@ export default defineConfig({
           items: [
             {
               label: "Getting Started",
-              link: "/guide/1-getting-started",
+              link: "/guide",
             },
             {
               label: "Migrate to Vite",
