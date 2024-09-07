@@ -1,205 +1,365 @@
 ---
 draft: false
-title: Migrate to Vite
-description: When migrating your codebase to Vue 3, it is advisable to also update your toolchain to Vite. This will speed up your development process and simplify configuration.
-tags: [vue, guide, vue3, vue2, vite, migration]
+title: Migrate from Webpack/Vue CLI to Vite
+description: Learn how to move your toolchain from Webpack to Vite
+tags: [webpack, update, vue, guide, vue3, vue2, vite, migration]
 head:
   - tag: title
-    content: "Guide: Migrate to Vite | migrate-vue"
+    content: "Guide: Migrate from Webpack to Vite | migrate-vue"
 ---
 
-When migrating your codebase to Vue 3, it is advisable to also update your toolchain to Vite. This transition will accelerate your development process and simplify configuration. Additionally, it facilitates the migration of your codebase to TypeScript, as Vite supports TypeScript out of the box.
+Migrating to Vue 3 is a great opportunity to upgrade your toolchain to Vite too!
+You'll boost your development speed, streamline configurations, and simplify migrating to TypeScript, as Vite supports it out of the box.
 
-This guide will walk you through the process of refactoring a Vue application from Vue CLI to Vite.
+This guide will take you step-by-step through refactoring your Vue application from Webpack/Vue CLI to Vite.
 
-## Initial Setup
+:::note[Not using Vue?]
+**Stick around**—this guide is largely framework-agnostic unless noted otherwise.
+:::
 
-To begin, let's set up a new Vite project as a reference.
+## Initial Setup: Creating a New Vite Project
 
-### 1. Create a New Vite Project
+Let's first set up a fresh Vite project as a reference.
 
-Navigate to your project directory and create a new Vite project:
+In your terminal, navigate to your projects directory and create a Vite project:
 
 ```bash
-npx create-vite vue-3-reference
-cd vue-3-reference
+npx create-vite my-project
+cd my-project
 ```
 
-When prompted, choose Vue and (if you're using TypeScript) TypeScript. Open the project to familiarize yourself with the project structure in Vite.
+Choose Vue (or your preferred framework) and TypeScript if applicable.
+Explore the new project structure before proceeding.
 
-## Migrating Project Files
+To see Vite in action, run:
 
-When migrating a Vue 3 project, you can go ahead and move your `src` directory, along with any other core assets (like `public`), from your old Vue CLI project to the new Vite project.
+```bash
+npm install
+npm run dev
+```
+
+## Migrating a Vue Project from Vue CLI
+
+If your project is already on Vue 3, simply copy your `src` directory and any necessary assets like `public` into the Vite project:
 
 ```diff
-// Old Structure
+// Original Vue CLI Structure
 my-old-vue2-app/
 ├── src/
 ├── public/
 ├── vue.config.js
 └── package.json
 
-// New Structure
-my-vue3-app/
+// New Vite Structure
+my-project/
 ├── src/
 ├── public/
 ├── vite.config.js
 └── package.json
 ```
 
-If you are still on Vue 2, it is recommended to install Vite directly in your existing project:
+For Vue 2 (or other frameworks), directly install Vite in your existing project.
 
-## Updating Configuration
-
-### 2. Replace `vue.config.js` with `vite.config.js`
-
-Vite uses `vite.config.js` (or `vite.config.ts` if you prefer TypeScript) for its configuration. Here's how you can replace your existing `vue.config.js` with `vite.config.js`.
-
-**Before (vue.config.js):**
+```bash that are available in your code. Vite, however, uses `VITE\_`.
+To avoid renaming all variables, add this to `vite.config.js`:
 
 ```js
-// vue.config.js
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  envPrefix: "VITE_",
+});
+```
+
+:::
+
+## Migrating a Project from Webpack
+
+Start by creating an `index.html` and a `vite.config.js`.
+
+Your `index.html` should contain at least this:
+
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Title</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- Update the path to your needs -->
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
+```
+
+In Vite, `index.html` acts as the entry point. If your project has multiple entry points, the next section will help you handle that.
+
+We will now translate Webpack options one by one into the corresponding Vite options.
+
+### Entry Point, Mode, and Output
+
+In Webpack, you'd define entry points, mode, and output like this:
+
+```js title="webpack.config.js"
+const path = require("path");
+
 module.exports = {
-  devServer: {
-    port: 8080,
-    proxy: "http://localhost:3000",
+  entry: "./src/index.js",
+  output: {
+    filename: "bundle.js",
+    path: path.resolve(__dirname, "dist"),
   },
-  configureWebpack: {
-    plugins: [new SomeWebpackPlugin()],
-  },
+  mode: "development", // or 'production'
 };
 ```
 
-**After (vite.config.js):**
+Vite automatically handles entry points and mode settings. By default, it uses `index.html` and outputs builds to `dist`.
+The mode is set to `development` for the dev server and to `production` for the build.
 
-```js
-// vite.config.js
+If you need multiple entry points, or you are a library author, you can define them in `vite.config.js` like this:
+
+```js title="vite.config.js"
+import { resolve } from "path";
 import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue2";
-import someVitePlugin from "vite-plugin-some";
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), someVitePlugin()],
-  server: {
-    port: 8080,
-    proxy: {
-      "/api": "http://localhost:3000",
+  build: {
+    outDir: "dist",
+    lib: {
+      entry: resolve(__dirname, "lib/main.js"),
+      name: "MyLib",
+      fileName: "my-lib", // Extensions will be added automatically
     },
   },
 });
 ```
 
-### 3. Handling Aliases
+If you need to change your Vite config depending on the mode, you can pass a function to `defineConfig`:
 
-Webpack aliasing is different from Vite's aliasing system. If you used aliases in your `vue.config.js`, update them in `vite.config.js`.
+```js title="vite.config.js"
+import { resolve } from "path";
 
-**Before (vue.config.js):**
+export default ({ mode }) => {
+  return {
+    // do something with mode
+  };
+};
+```
 
-```js
-// vue.config.js
-const path = require("path");
+You can find more details in the official [Vite documentation](https://vitejs.dev/guide/build#library-mode).
 
+### Webpack Loaders
+
+Webpack uses loaders to handle file transformations, while Vite relies on [ESBuild](https://esbuild.github.io/) for most features right out of the box.
+
+Here is a list of loaders you can safely remove from your Webpack configuration:
+
+- **Babel Loader**: Vite uses ESBuild for fast transpiling, eliminating the need for Babel.
+- **File Loader / URL Loader**: Vite automatically handles static assets (e.g., images, SVGs, JSON). More details in the [Vite documentation](https://vitejs.dev/guide/assets.html).
+- **CSS/Sass/SCSS Loader / Style Loader**: Vite offers native support for CSS and preprocessors like Sass/SCSS. Just make sure you have the necessary pre-processor installed. Importing CSS files will automatically add them to the DOM.
+- **JSON Loader**: JSON imports work out-of-the-box with Vite.
+
+For other specific loaders, you might need a Vite plugin. While I can't cover all loader types, note that Vite generally handles most use cases Webpack does, with few exceptions.
+
+:::caution[Legacy Browsers]
+Vite's default build target is modern browsers, as listed [here](https://v3.vitejs.dev/guide/build.html#browser-compatibility). If you need to support older browsers, use the legacy plugin:
+
+```js title="vite.config.js"
+import legacy from "@vitejs/plugin-legacy";
+
+export default {
+  plugins: [
+    legacy({
+      targets: ["defaults", "not IE 11"],
+    }),
+  ],
+};
+```
+
+:::
+
+### Static Assets with the `public` Directory
+
+As previously mentioned, Vite automatically manages asset loading. However, if you need to serve assets directly without importing them, place them in the `public` directory. Files in this directory are accessible from the root path.
+
+```html title="index.html"
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- favicon stored as a static asset in the public directory -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Title</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
+```
+
+### Dev Server
+
+Both Webpack and Vite offer development servers, but Vite’s is significantly faster, thanks to native ES module support.
+
+```js title="webpack.config.js"
 module.exports = {
-  chainWebpack: (config) => {
-    config.resolve.alias.set("@", path.resolve(__dirname, "src"));
+  devServer: {
+    contentBase: "./dist",
+    hot: true,
   },
 };
 ```
 
-**After (vite.config.js):**
-
-```js
-// vite.config.js
+```js title="vite.config.js"
 import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue2";
-import { resolve } from "path";
 
 export default defineConfig({
-  plugins: [vue()],
+  server: {
+    open: true, // automatically opens the browser
+    hmr: true, // Hot Module Replacement
+  },
+});
+```
+
+### Aliases
+
+Webpack and Vite use exactly the same configuration for aliases:
+
+```js title="webpack.config.js"
+const path = require("path");
+
+module.exports = {
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "src"),
+    },
+  },
+};
+```
+
+```js title="vite.config.js"
+import { resolve } from "path";
+
+export default {
   resolve: {
     alias: {
       "@": resolve(__dirname, "src"),
     },
   },
+};
+```
+
+:::note[TypeScript]
+If you're using TypeScript, don't forget to configure aliases in your `tsconfig.json` as well:
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  }
+}
+```
+
+:::
+
+### Environment Variables
+
+In Webpack, you need to explicitly load environment files (e.g., using `dotenv`) and pass the variables to your code via the `DefinePlugin`:
+
+```js title="webpack.config.js"
+const webpack = require("webpack");
+require("dotenv").config({ path: "./.env" });
+
+module.exports = {
+  plugins: [
+    new webpack.DefinePlugin({
+      "process.env": JSON.stringify(process.env),
+    }),
+  ],
+};
+```
+
+Vite automatically loads all environment variables prefixed with `VITE_` and makes them available under `import.meta.env`. If you need to use an environment variable without the `VITE_` prefix, you can define it manually in your vite.config.js:
+
+```js title="vite.config.js"
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  define: {
+    "import.meta.env.ENV_VARIABLE": JSON.stringify(process.env.ENV_VARIABLE),
+  },
 });
 ```
 
-## Handling Common Webpack Loaders
+See the corresponding [official docs](https://vitejs.dev/guide/env-and-mode.html) for more details.
 
-### 4. Removing or Replacing Webpack Loaders
+### Custom Code Splitting (chunks)
 
-Webpack projects often use various loaders to handle different file types. In Vite, many of these loaders are either built-in or replaced by plugins. Here are some common loaders and their Vite equivalents:
-
-- **Babel Loader**: Vite uses ESBuild for fast transpiling. Remove any Babel-loader configuration.
-
-  ```bash
-  npm remove babel-loader @babel/core @babel/preset-env
-  ```
-
-  Instead, Vite handles modern JavaScript and TypeScript out of the box.
-
-- **CSS/Sass/SCSS Loader**: Vite natively supports CSS and preprocessors like Sass and SCSS.
-
-  If you were using `sass-loader` or `style-loader`, remove them from `package.json` and ensure you have the necessary pre-processor installed:
-
-  ```bash
-  npm remove sass-loader style-loader
-  npm install sass --save-dev
-  ```
-
-- **File Loader and URL Loader**: Vite handles static assets differently. Static assets in Vite can be imported as modules or placed in the `public` directory.
-
-  If your webpack configuration used `file-loader` or `url-loader`, remove them:
-
-  ```bash
-  npm remove file-loader url-loader
-  ```
-
-  Adjust any asset paths as needed to follow Vite's conventions.
-
-## Dependency Updates
-
-### 5. Update Package Dependencies
-
-Replace Vue CLI and Webpack dependencies with Vite-compatible ones. Remove `@vue/cli-*` packages and install `vite` and `@vitejs/plugin-vue2`.
-
-```bash
-npm remove @vue/cli-service webpack webpack-cli
-npm install vite @vitejs/plugin-vue2 --save-dev
-```
-
-## Noteworthy Differences and Edge Cases
-
-### 6. CSS and Asset Handling
-
-Vite handles CSS and other assets differently than Webpack. Ensure all asset paths are relative or use base URLs correctly. Static assets can be placed in the `public` directory, which Vite serves at the root.
-
-### 7. Environment Variables
-
-Vite uses different environment variables than Vue CLI. Convert `.env` files to match Vite's naming conventions (`VITE_` prefix).
-
-```diff
-// .env
--VUE_APP_API_URL=https://api.example.com
-+VITE_API_URL=https://api.example.com
-```
-
-### 8. Unsupported Vue CLI/Webpack Features
-
-Certain Webpack-specific features, like `require.context`, do not have direct equivalents in Vite. Rewrite such parts of the codebase to use Vite's native import or dynamic import features.
-
-### 9. Vue Router and Vuex
-
-If you're using Vue Router or Vuex, they generally work the same way, but ensure all imports are compatible with ES module syntax.
+While Vite automatically splits your code based on dynamic imports, Webpack allows you to manually control code splitting using special comments:
 
 ```js
-// Update imports to ES module syntax if needed
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Vuex from "vuex";
+const UserDetails = () =>
+  import(/* webpackChunkName: "group-user" */ "./UserDetails");
+const UserDashboard = () =>
+  import(/* webpackChunkName: "group-user" */ "./UserDashboard");
+const UserProfileEdit = () =>
+  import(/* webpackChunkName: "group-user" */ "./UserProfileEdit");
 ```
 
-## Testing and Linting
+This can be done in Vite using the `manualChunks` option.
 
-If you use Jest or other testing frameworks, make sure to update their configurations to work with Vite. You may also consider switching to [Vitest](https://vitest.dev/).
+```js title="vite.config.js"
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  build: {
+    rollupOptions: {
+      // https://rollupjs.org/guide/en/#outputmanualchunks
+      output: {
+        manualChunks: {
+          "group-user": [
+            "./src/UserDetails",
+            "./src/UserDashboard",
+            "./src/UserProfileEdit",
+          ],
+        },
+      },
+    },
+  },
+});
+```
+
+### Framework Integration
+
+To integrate your preferred framework with Vite, add the corresponding plugin to your project. Here's how you can set it up in your vite.config.js:
+
+```js title="vite.config.js"
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+import react from "@vitejs/plugin-react";
+import solid from "vite-plugin-solid";
+import svelte from "@sveltejs/vite-plugin-svelte";
+
+export default defineConfig({
+  plugins: [
+    vue(), // // Replace 'vue()' with the plugin for your framework
+  ],
+});
+```
+
+### Other Webpack Plugins
+
+Webpack has a vast ecosystem of plugins for various configurations, making it impractical to cover all of them here. However, since Vite uses Rollup under the hood for bundling, you can often find a Rollup plugin that provides the functionality you need. Check out the [Rollup plugin repository](https://github.com/rollup/plugins) for available options.
+
+## Need Assistance?
+
+If you need help with your migration, feel free to [contact me via email](mailto:contact@migrate-vue.com) or visit the [contact page](/contact). I offer professional assistance and guidance for migrations at a fair price.
