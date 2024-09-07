@@ -60,7 +60,14 @@ my-project/
 
 For Vue 2 (or other frameworks), directly install Vite in your existing project.
 
-```bash that are available in your code. Vite, however, uses `VITE\_`.
+```bash
+npm i -D vite
+```
+
+Most of the Vue CLI configuration is the same as Vite. So you can just copy it over.
+
+:::caution[Environment Variables]
+Vue CLI uses the prefix `VUE_APP_` for env vars that are available in your code. Vite, however, uses `VITE_`.
 To avoid renaming all variables, add this to `vite.config.js`:
 
 ```js

@@ -33,46 +33,140 @@ It is required to update all occurrences on **custom components** that uses `v-m
 `<input>` and other form elements still use the native prop and event combination, e.g., `:value` and `@input`.
 {/* .sync and mode-event https://v2.vuejs.org/v2/guide/components-custom-events#Customizing-Component-v-model */}
 
+Vue 2 components use `value` and emit `input` events. Other synced props are possible with the sync modifier:
+
+```vue title="vue2-component.vue"
+<template>
+  <button @click="emit('input', value + 1)">Click me ({{ value }})</button>
+  <button @click="emit('update:otherValue', otherValue + 1)">
+    Click me ({{ otherValue }})
+  </button>
+</template>
+
+<script>
+default export {
+  props: ['value', 'otherValue'],
+  emits: ['input', 'update:otherValue'],
+}
+</script>
+```
+
+Vue 3 components use `modelValue` and emit `update:modelValue` instead and allow multiple `v-model`s
+
+```vue title="vue3-component.vue"
+<template>
+  <button @click="emit('update:modelValue', value + 1)">
+    Click me ({{ value }})
+  </button>
+  <button @click="emit('update:otherValue', otherValue + 1)">
+    Click me ({{ otherValue }})
+  </button>
+</template>
+
+<script setup>
+defineProps({
+  modelValue: Number,
+  otherValue: Number,
+});
+
+defineEmits(["update:modelValue", "update:otherValue"]);
+</script>
+```
+
+As you can see, Vue 3 streamlined the usage of v-model.
+Just think as `v-model` being the short form of `v-model:modelValue` and this being the short form of `@update:modelValue` and `:modelValue`.
+
+```vue title="app.vue"
+<template>
+  <vue2Component v-model="value" :otherValue.sync="otherValue" />
+  <vue3Component v-model="value" v-model:otherValue="otherValue" />
+</template>
+```
+
 ### `Vue.set()` / `this.$set()`
 
-Vue 2 was based on `getters` and `setters` and could not track changes in an object directly.
-Therefore, it was necessary to explicitly "tell" Vue by using `Vue.set()` or `this.$set()`.
-However, Vue 3 uses proxies, so this is no longer required.
-These methods can be safely replaced with a normal assignment, e.g., `obj.foo = 'bar'`.
+Vue 2 was based on `getters` and `setters` and could not track changes in an object directly. Therefore, it was necessary to explicitly "tell" Vue by using `Vue.set()` or `this.$set()`. However, Vue 3 uses proxies, so this is no longer required. These methods can be safely replaced with a normal assignment, e.g., `obj.foo = 'bar'`.
 
 ### Deprecated `slot` / `slot-scope` syntax
 
-In Vue 2.6, a new syntax for slots and scoped slots was introduced, and `slot` / `slot-scope` was deprecated.
-If you still use the old syntax in your code, you must update it to the new syntax while migrating to Vue 3.
-This is also required for the vue-compat build to work (see [Setting Up the Vue-Compat Build and ESLint](/guide/5-migrate-to-vue-3#1-setting-up-the-vue-compat-build-and-eslint)).
+In Vue 2.6, a new syntax for slots and scoped slots was introduced, and `slot` / `slot-scope` was deprecated. If you still use the old syntax in your code, you must update it to the new syntax while migrating to Vue 3. This is also required for the vue-compat build to work (see [Setting Up the Vue-Compat Build and ESLint](/guide/5-migrate-to-vue-3#1-setting-up-the-vue-compat-build-and-eslint)).
+
+```vue title="OldSyntax.vue"
+<template>
+  <base-layout>
+    <template slot="header" slot-scope="slotProps">
+      <h1>{{ slotProps.title }}</h1>
+    </template>
+
+    <p>A paragraph for the main content.</p>
+    <p>And another one.</p>
+
+    <template slot="footer">
+      <p>Here's some contact info</p>
+    </template>
+  </base-layout>
+</template>
+```
+
+```vue title="NewSyntax.vue"
+<template>
+  <base-layout>
+    <template #header="slotProps">
+      <h1>{{ slotProps.title }}</h1>
+    </template>
+
+    <p>A paragraph for the main content.</p>
+    <p>And another one.</p>
+
+    <template #footer>
+      <p>Here's some contact info</p>
+    </template>
+  </base-layout>
+</template>
+```
 
 ### Filters
 
 Filters in Vue 2 were a convenient way to format text and data in templates, but they have been removed in Vue 3. If your codebase heavily relies on filters, you will need to refactor them into computed properties or methods.
 
-```js
+```vue title="CompositionApi.vue"
+<script setup>
 import { computed } from "vue";
+
+const items = ref([{ name: "Item 1" }, { name: "Item 2" }]);
 
 const filteredItems = computed(() => {
   return items.filter((item) => item.name.includes(searchTerm.value));
 });
+</script>
+```
+
+```vue title="OptionsApi.vue"
+<script>
+export default {
+  data: () => ({
+    items: [{ name: "Item 1" }, { name: "Item 2" }],
+  }),
+  computed: {
+    filteredItems() {
+      return this.items.filter((item) =>
+        this.item.name.includes(searchTerm.value),
+      );
+    },
+  },
+};
+</script>
 ```
 
 ### Custom Directives
 
-Custom directives are still supported in Vue 3. However, some changes might be required depending on how you use them.
-Vue 3 introduces a new lifecycle hook, `beforeUnmount`, and changes the signature for directive hooks.
-If your application relies on custom directives for significant DOM manipulations, you'll need to update these hooks to match the new API.
-While you're at it, you might want to consider removing directives altogether.
-There are some [rumors about custom directives being deprecated](https://youtu.be/xvkf3KOaRlQ?si=JAoLrkEX-p31NOQ2&t=1260) in later versions of Vue 3.
-Most of the time, a component can accomplish the same task more effectively.
+Custom directives are still supported in Vue 3. However, some changes might be required depending on how you use them. Vue 3 introduces a new lifecycle hook, `beforeUnmount`, and changes the signature for directive hooks. If your application relies on custom directives for significant DOM manipulations, you'll need to update these hooks to match the new API. While you're at it, you might want to consider removing directives altogether. There are some [rumors about custom directives being deprecated](https://youtu.be/xvkf3KOaRlQ?si=JAoLrkEX-p31NOQ2&t=1260) in later versions of Vue 3. Most of the time, a component can accomplish the same task more effectively.
+
+If you are writing your own directives, you surely can figure out the new syntax yourself ;).
 
 ### Mixins
 
-Mixins are a powerful feature in Vue 2 for reusing code across components, but they have been increasingly discouraged in favor of the Composition API in Vue 3.
-The Composition API provides a more explicit and organized way to reuse code without the "implicit magic" that can make mixins hard to debug and maintain.
-If your application relies on mixins, plan to refactor this shared logic into composables.
-Composables are functions that encapsulate reactive state and logic and can be imported and reused across components, providing a clearer and more modular approach to code reuse.
+Mixins are a powerful feature in Vue 2 for reusing code across components, but they have been increasingly discouraged in favor of the Composition API in Vue 3. The Composition API provides a more explicit and organized way to reuse code without the "implicit magic" that can make mixins hard to debug and maintain. If your application relies on mixins, plan to refactor this shared logic into composables. Composables are functions that encapsulate reactive state and logic and can be imported and reused across components, providing a clearer and more modular approach to code reuse.
 
 ### Event Bus ($on, $off, $emit)
 
@@ -80,6 +174,7 @@ In Vue 2, it is common to use an event bus and component events to pass data aro
 However, in Vue 3, component events were replaced by `$emit` and binding to events via `v-on`.
 A global event bus can still be used but often leads to hard-to-maintain, spaghetti code.
 Therefore, you should consider using a different state management solution like Pinia for more complex scenarios.
+
 If your codebase heavily relies on an event bus, it might seem easier to leave it as is, but future developers will appreciate you untangling the mess that an event bus introduces.
 
 ## 2. Checking Dependencies

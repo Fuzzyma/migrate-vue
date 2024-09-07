@@ -3,5 +3,13 @@
   "useTabs": false,
   "bracketSameLine": true,
   "plugins": ["prettier-plugin-astro"],
-  "htmlWhitespaceSensitivity": "ignore"
+  "htmlWhitespaceSensitivity": "ignore",
+  "overrides": [
+    {
+      "files": "*.mdx",
+      "options": {
+        "printWidth": 80
+      }
+    }
+  ]
 }
