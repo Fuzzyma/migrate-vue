@@ -1,0 +1,88 @@
+---
+import type { Props } from "@astrojs/starlight/props";
+import { MenuIcon } from "astro-navbar";
+
+const { labels } = Astro.props;
+---
+
+<starlight-menu-button class="button block md:sl-hidden">
+  <button
+    class="w-4 h-4"
+    aria-label={labels["menuButton.accessibleLabel"]}
+    aria-controls="starlight__sidebar">
+    <svg
+      fill="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="https://www.w3.org/2000/svg">
+      <path
+        class="astronav-close-icon astronav-toggle hidden"
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M18.278 16.864a1 1 0 01-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 01-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 011.414-1.414l4.829 4.828 4.828-4.828a1 1 0 111.414 1.414l-4.828 4.829 4.828 4.828z">
+      </path>
+      <path
+        class="astronav-open-icon astronav-toggle"
+        fill-rule="evenodd"
+        d="M4 5h16a1 1 0 010 2H4a1 1 0 110-2zm0 6h16a1 1 0 010 2H4a1 1 0 010-2zm0 6h16a1 1 0 010 2H4a1 1 0 010-2z">
+      </path>
+    </svg>
+  </button>
+</starlight-menu-button>
+
+<script>
+  class StarlightMenuButton extends HTMLElement {
+    btn = this.querySelector("button")!;
+
+    constructor() {
+      super();
+      // Toggle `aria-expanded` state when a user clicks the button.
+      this.btn.addEventListener("click", () => this.toggleExpanded());
+
+      // Close the menu when a user presses the escape key.
+      const parentNav = this.closest("nav");
+      if (parentNav) {
+        parentNav.addEventListener("keyup", (e) => this.closeOnEscape(e));
+      }
+    }
+
+    setExpanded(expanded: boolean) {
+      this.setAttribute("aria-expanded", String(expanded));
+      document.body.toggleAttribute("data-mobile-menu-expanded", expanded);
+    }
+
+    toggleExpanded() {
+      this.setExpanded(this.getAttribute("aria-expanded") !== "true");
+    }
+
+    closeOnEscape(e: KeyboardEvent) {
+      if (e.code === "Escape") {
+        this.setExpanded(false);
+        this.btn.focus();
+      }
+    }
+  }
+
+  customElements.define("starlight-menu-button", StarlightMenuButton);
+</script>
+
+<style>
+  .button {
+    position: fixed;
+    top: calc((var(--sl-nav-height) - var(--sl-menu-button-size)) / 2);
+    inset-inline-end: 2.25rem;
+    z-index: var(--sl-z-index-navbar);
+    cursor: pointer;
+  }
+</style>
+
+<style is:global>
+  [data-mobile-menu-expanded] {
+    overflow: hidden;
+  }
+
+  @media (min-width: 50rem) {
+    [data-mobile-menu-expanded] {
+      overflow: auto;
+    }
+  }
+</style>

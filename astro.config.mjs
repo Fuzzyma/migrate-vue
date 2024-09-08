@@ -23,6 +23,7 @@ export default defineConfig({
         SiteTitle: "./src/components/starlight/SiteTitle.astro",
         PageFrame: "./src/components/starlight/PageFrame.astro",
         Sidebar: "./src/components/starlight/Sidebar.astro",
+        MobileMenuToggle: "./src/components/starlight/MobileMenuToggle.astro",
       },
       logo: {
         src: svgIcon,
