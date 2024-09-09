@@ -6,57 +6,74 @@ import PricingCard from "@components/pricing.astro";
 
 const pricing = [
   {
-    name: "First Assessment",
-    price: "150 EUR",
-    popular: true,
+    name: "Initial Consultation",
+    price: "Free",
+    popular: false,
     features: [
-      "Detailed Code Review",
-      "Custom Migration Plan",
-      // "Risk Identification",
-      "Expert Consultation",
-      "Quote",
+      "1-Hour Talk",
+      "Feasibility Check",
+      "Scope Discussion",
+      "Recommendations",
     ],
     button: {
-      text: "Get a quote",
-      link: "/contact#quote",
+      text: "Book Now",
+      link: "/contact#consultation",
     },
     description:
-      "Get a comprehensive analysis of your Vue 2 codebase with a tailored migration plan and expert advice.",
+      "A free 1-hour talk to assess your Vue 2 project, explore the feasibility of migration, and discuss potential scope.",
+  },
+  {
+    name: "Migration Report",
+    price: "500 EUR",
+    popular: true,
+    features: [
+      "Code Review",
+      "Migration Plan",
+      "Cost Estimate",
+      "Risk Analysis",
+    ],
+    button: {
+      text: "Get Report",
+      link: "/contact#report",
+    },
+    description:
+      "Receive a detailed report outlining what needs to be migrated, with a timeline, cost estimation, and identified risks.",
   },
   {
     name: "Full Migration",
     price: "Custom",
     popular: false,
     features: [
-      "Complete Migration Service",
-      "Compatibility Assurance",
-      "Thorough Testing",
-      "Deployment Support",
+      "Full Migration",
+      "Compatibility Check",
+      "Testing",
+      "Deployment",
     ],
     button: {
-      text: "Get a quote",
+      text: "Get a Quote",
       link: "/contact#quote",
     },
     description:
       "End-to-end migration from Vue 2 to Vue 3 with full testing, optimization, and deployment support.",
   },
-  {
-    name: "Hire Per Hour",
-    price: "90 EUR / h",
-    popular: false,
-    features: [
-      "Flexible Hours",
-      "Task-Based Work",
-      "On-Demand Expertise",
-      "Scalable Support",
-    ],
-    button: {
-      text: "Contact me",
-      link: "/contact#hire",
-    },
-    description:
-      "Get expert help on specific tasks as needed, with flexible hourly engagement.",
-  },
+
+  // {
+  //   name: "Hire Per Hour",
+  //   price: "90 EUR / h",
+  //   popular: false,
+  //   features: [
+  //     "Flexible Hours",
+  //     "Task-Based Work",
+  //     "On-Demand Expertise",
+  //     "Scalable Support",
+  //   ],
+  //   button: {
+  //     text: "Contact me",
+  //     link: "/contact#hire",
+  //   },
+  //   description:
+  //     "Get expert help on specific tasks as needed, with flexible hourly engagement.",
+  // },
 ];
 ---
 
@@ -72,5 +89,19 @@ const pricing = [
     <div class="grid md:grid-cols-3 gap-10 mx-auto max-w-screen-lg mt-12">
       {pricing.map((item) => <PricingCard plan={item} />)}
     </div>
+
+    <section
+      class="mt-6 p-2 bg-transparent text-gray-600 text-sm max-w-screen-sm text-center mx-auto">
+      <p class="font-medium text-gray-700">
+        I am also available for hire as a freelancer. Whether you need help with
+        your Vue.js projects, migrations, or other web development tasks, feel
+        free to reach out!
+      </p>
+      <a
+        href="/contact#hire"
+        class="inline-block mt-2 text-[#41B883] underline hover:text-[#369E6E] transition-colors">
+        Hire Me
+      </a>
+    </section>
   </Container>
 </Layout>

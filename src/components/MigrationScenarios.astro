@@ -1,0 +1,123 @@
+---
+import { Icon } from "astro-icon/components";
+
+const migrationScenarios = [
+  {
+    from: { name: "Vue 2", icon: "skill-icons:vuejs-light" },
+    to: { name: "Vue 3", icon: "skill-icons:vuejs-light" },
+  },
+  {
+    from: { name: "Nuxt 2", icon: "skill-icons:nuxtjs-light" },
+    to: { name: "Nuxt 3", icon: "skill-icons:nuxtjs-light" },
+  },
+  {
+    from: { name: "Vuex", icon: "skill-icons:vuejs-light" }, // Replace with Vuex icon if available
+    to: { name: "Pinia", icon: "skill-icons:pinia-light" },
+  },
+  {
+    from: { name: "Vuetify", icon: "skill-icons:vuetify-light" },
+    to: { name: "Vuetify 3", icon: "skill-icons:vuetify-light" },
+  },
+  {
+    from: { name: "Quasar", icon: "devicon:quasar" }, // Replace with Quasar icon if available
+    to: { name: "Quasar 2", icon: "devicon:quasar" },
+  },
+  {
+    from: { name: "webpack", icon: "skill-icons:webpack-light" }, // Replace with webpack icon if available
+    to: { name: "Vite", icon: "skill-icons:vite-light" },
+  },
+  {
+    from: { name: "vue-cli", icon: "skill-icons:vuejs-light" }, // Replace with vue-cli icon if available
+    to: { name: "Vite", icon: "skill-icons:vite-light" },
+  },
+];
+---
+
+<section class="migration-scenarios-section py-12 text-center">
+  <h2 class="text-3xl font-bold text-center mb-6">Migration Scenarios</h2>
+  <p class="mb-4 text-gray-700">Some of the most common migration scenarios</p>
+  <div class="flex flex-wrap justify-center gap-8 text-gray-700">
+    {
+      migrationScenarios.map((scenario) => (
+        <div class="flex items-center space-x-4">
+          <div class="icon-box text-3xl">
+            <Icon name={scenario.from.icon} class="text-gray-500" />
+          </div>
+          <div class="text-xl font-medium">
+            <span>{scenario.from.name}</span>
+          </div>
+          <div class="arrow text-xl">→</div>
+          <div class="icon-box text-3xl">
+            <Icon name={scenario.to.icon} class="text-blue-500" />
+          </div>
+          <div class="text-xl font-medium">
+            <span>{scenario.to.name}</span>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+{
+  /* 
+<section class="migration-scenarios-section py-8">
+  <h2 class="text-3xl font-bold text-center mb-6">Migration Scenarios</h2>
+  <div class="flex flex-wrap justify-center gap-8">
+    {
+      migrationScenarios.map((scenario) => (
+        <div class="flex items-center space-x-8">
+          <div class="relative">
+            <div class="icon-circle bg-gray-100 p-4 rounded-full shadow-md">
+              <Icon name={scenario.from.icon} class="text-gray-500 text-3xl" />
+            </div>
+            <p class="text-center text-sm font-medium text-gray-700 mt-2">
+              {scenario.from.name}
+            </p>
+          </div>
+          <div class="relative flex-1 h-px bg-gray-300">
+            <span class="absolute inset-0 flex justify-center items-center text-xl">
+              →
+            </span>
+          </div>
+          <div class="relative">
+            <div class="icon-circle bg-blue-100 p-4 rounded-full shadow-md">
+              <Icon name={scenario.to.icon} class="text-blue-500 text-3xl" />
+            </div>
+            <p class="text-center text-sm font-medium text-gray-700 mt-2">
+              {scenario.to.name}
+            </p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<section class="migration-scenarios-section py-8">
+  <h2 class="text-3xl font-bold text-center mb-6">Migration Scenarios</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {
+      migrationScenarios.map((scenario) => (
+        <div class="migration-box p-6 border rounded-lg shadow-lg bg-white flex flex-col items-center">
+          <div class="text-center">
+            <Icon
+              name={scenario.from.icon}
+              class="text-4xl mb-2 text-gray-600"
+            />
+            <p class="font-medium text-gray-700">{scenario.from.name}</p>
+          </div>
+          <div class="arrow-box mt-4 mb-4">
+            <span class="text-2xl text-gray-500">↓</span>
+          </div>
+          <div class="text-center">
+            <Icon name={scenario.to.icon} class="text-4xl mb-2 text-blue-600" />
+            <p class="font-medium text-gray-700">{scenario.to.name}</p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>
+*/
+}

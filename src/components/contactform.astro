@@ -38,8 +38,10 @@ import Button from "./ui/button.astro";
       name="subject"
       class="bg-white w-full px-4 py-3 border-2 placeholder:text-gray-800 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-gray-600 ring-gray-100">
       <option value="general">General Enquiry</option>
-      <option value="assessment">Get a quote</option>
-      <option value="hire">Hire per hour</option>
+      <option value="consultation">Free Consultation</option>
+      <option value="report">Migration Report</option>
+      <option value="quote">Quote</option>
+      <option value="hire">Hire</option>
     </select>
   </div>
   <div class="mb-3">
@@ -55,12 +57,18 @@ import Button from "./ui/button.astro";
 </form>
 
 <script is:inline>
+  const wantsConsoltation = document.location.hash === "#consultation";
+  const wantsReport = document.location.hash === "#report";
   const wantsQuote = document.location.hash === "#quote";
   const wantsHire = document.location.hash === "#hire";
 
-  document.getElementById("subject").value = wantsQuote
-    ? "assessment"
-    : wantsHire
-      ? "hire"
-      : "general";
+  document.getElementById("subject").value = wantsConsoltation
+    ? "consultation"
+    : wantsReport
+      ? "report"
+      : wantsQuote
+        ? "quote"
+        : wantsHire
+          ? "hire"
+          : "general";
 </script>

@@ -1,34 +1,4 @@
 ---
-import { Icon } from "astro-icon/components";
-import Link from "./ui/link.astro";
-
-const benefits = [
-  {
-    title: "Performance Improvements",
-    description:
-      "Vue 3 offers significant performance enhancements with faster rendering and smaller bundle sizes.",
-    icon: "⚡️",
-  },
-  {
-    title: "New Features & API",
-    description:
-      "Enjoy new features like Composition API, Teleport, Fragments, and more for better code organization and reusability.",
-    icon: "🚀",
-  },
-  {
-    title: "Community & Ecosystem",
-    description:
-      "Stay up-to-date with the growing ecosystem and active community support around Vue 3.",
-    icon: "🌐",
-  },
-  {
-    title: "Future-Proofing",
-    description:
-      "Avoid the risks of running unsupported software by upgrading to a version with ongoing support.",
-    icon: "🛡️",
-  },
-];
-
 const migrationSteps = [
   {
     step: "1. Assessment",
@@ -65,52 +35,25 @@ const migrationSteps = [
 ];
 ---
 
-<section class="benefits-section py-8">
-  <h2 class="text-3xl font-bold text-center mb-6">Why Migrate to Vue 3?</h2>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-    {
-      benefits.map((benefit) => (
-        <div class="benefit-card p-4 border rounded shadow-lg">
-          <div class="icon text-3xl mb-4">{benefit.icon}</div>
-          <h3 class="text-xl font-semibold mb-2">{benefit.title}</h3>
-          <p class="text-gray-600">{benefit.description}</p>
-        </div>
-      ))
-    }
-  </div>
-</section>
-
 <section class="migration-process-section py-12">
-  <h2 class="text-3xl font-bold text-center mb-10">
+  <h2 class="text-3xl font-bold text-center mb-6">
     How the Migration Process Works
   </h2>
   <div class="space-y-12">
     {
       migrationSteps.map((step) => (
-        <div class="flex flex-col md:flex-row items-center">
-          <div class="text-5xl mb-4 md:mb-0 md:w-1/4 flex justify-center">
+        <div class="flex items-center">
+          <div class="text-5xl mb-4 md:mb-0 lg:w-1/4 justify-center hidden lg:flex">
             {step.icon}
           </div>
-          <div class="md:w-3/4 px-6">
-            <h3 class="text-2xl font-semibold mb-3">{step.step}</h3>
+          <div class="lg:w-3/4 w-full">
+            <h3 class="text-2xl font-semibold mb-3">
+              <span class="inline lg:hidden">{step.icon}</span> {step.step}
+            </h3>
             <p class="text-lg text-gray-700" set:html={step.description} />
           </div>
         </div>
       ))
     }
   </div>
-</section>
-
-<section class="py-12 flex items-center flex-col gap-6">
-  <h2 class="text-3xl font-bold text-center mb-4">Ready to migrate?</h2>
-  <p>
-    Upgrade to a more robust, efficient, and maintainable app with Vue 3 now!
-  </p>
-  <Link
-    size="lg"
-    href="/pricing"
-    class="flex gap-1 items-center justify-center">
-    <Icon class="text-white w-5 h-5" name="mdi:coins" />
-    Check our offer
-  </Link>
 </section>

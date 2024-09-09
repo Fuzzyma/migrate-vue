@@ -1,17 +1,18 @@
 ---
+import { Icon } from "astro-icon/components";
 import Link from "./ui/link.astro";
 ---
 
-<div
-  class="bg-black p-8 md:px-20 md:py-20 mt-20 mx-auto max-w-5xl rounded-lg flex flex-col items-center text-center">
-  <h2 class="text-white text-4xl md:text-6xl tracking-tight">
-    Build faster websites.
-  </h2>
-  <p class="text-slate-400 mt-4 text-lg md:text-xl">
-    Pull content from anywhere and serve it fast with Astro's next-gen island
-    architecture.
+<section class="py-12 flex items-center flex-col gap-6">
+  <h2 class="text-3xl font-bold text-center mb-4">Ready to migrate?</h2>
+  <p class="text-lg text-gray-700">
+    Upgrade to a more robust, efficient, and maintainable app with Vue 3 now!
   </p>
-  <div class="flex mt-5">
-    <Link href="#" style="inverted">Get Started</Link>
-  </div>
-</div>
+  <Link
+    size="lg"
+    href="/pricing"
+    class="flex gap-1 items-center justify-center">
+    <Icon class="text-white w-5 h-5" name="mdi:coins" />
+    Check our offer
+  </Link>
+</section>

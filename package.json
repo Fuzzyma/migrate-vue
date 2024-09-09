@@ -19,6 +19,7 @@
     "@fontsource-variable/bricolage-grotesque": "^5.0.6",
     "@fontsource-variable/inter": "^5.0.18",
     "@iconify-json/bx": "^1.1.10",
+    "@iconify-json/devicon": "^1.2.0",
     "@iconify-json/logos": "^1.1.44",
     "@iconify-json/mdi": "^1.1.68",
     "@iconify-json/mi": "^1.1.9",
