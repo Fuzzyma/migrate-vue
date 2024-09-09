@@ -23,6 +23,7 @@
     "@iconify-json/mdi": "^1.1.68",
     "@iconify-json/mi": "^1.1.9",
     "@iconify-json/simple-icons": "^1.1.102",
+    "@iconify-json/skill-icons": "^1.2.0",
     "@iconify-json/uil": "^1.1.9",
     "@iconify-json/weui": "^1.1.1",
     "@tailwindcss/typography": "^0.5.13",

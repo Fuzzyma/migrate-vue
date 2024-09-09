@@ -46,6 +46,13 @@ export default defineConfig({
           },
         },
         {
+          label: "About Me",
+          link: "/about",
+          attrs: {
+            class: "md:sl-hidden",
+          },
+        },
+        {
           label: "Contact",
           link: "/contact",
           attrs: {
