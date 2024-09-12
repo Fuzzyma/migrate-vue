@@ -3,8 +3,17 @@ import Container from "@components/container.astro";
 import Sectionhead from "@components/sectionhead.astro";
 import Layout from "@layouts/Layout.astro";
 import { Icon } from "astro-icon/components";
-import me from "assets/me.png";
+import me from "assets/cropped.jpg";
 import { Picture } from "astro:assets";
+import Button from "@components/ui/icon-button.astro";
+
+export const LINKS = {
+  github: "https://github.com/Fuzzyma",
+  github2: "https://github.com/svgdotjs",
+  linkedin:
+    "https://www.linkedin.com/in/ulrich-matthias-sch%C3%A4fer-a1a701176/",
+  twitter: "https://x.com/saulmurf",
+};
 ---
 
 <Layout title="About Me">
@@ -14,10 +23,10 @@ import { Picture } from "astro:assets";
       <Fragment slot="desc">My Lifestory</Fragment>
     </Sectionhead>
 
-    <div class="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-12 py-10">
+    <div class="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-10 py-10">
       <div
-        class="flex md:flex-col items-center justify-center md:justify-start gap-12">
-        <div class="max-w-72 max-h-72">
+        class="flex md:flex-col items-center justify-center md:justify-start md:gap-6 gap-5 sm:gap-12">
+        <div class="max-w-72 max-h-72 rounded-full overflow-hidden">
           <Picture
             src={me}
             alt="A chiby of myself"
@@ -27,31 +36,75 @@ import { Picture } from "astro:assets";
             format="webp"
           />
         </div>
-        <div class="text-gray-700">
-          <p class="my-2 hidden md:block">A list of things I like.</p>
-          <ul
-            class="text-sm block [&>li]:flex [&>li]:gap-2 [&>li]:items-center columns-2">
-            <li><Icon name="skill-icons:vuejs-light" />Vue</li>
-            <li><Icon name="skill-icons:nuxtjs-light" />Nuxt</li>
-            <li><Icon name="skill-icons:typescript" />Typescript</li>
-            <li><Icon name="skill-icons:astro" />Astro</li>
-            <li><Icon name="skill-icons:vite-light" />Vite</li>
-            <li><Icon name="skill-icons:php-light" />PHP</li>
-            <li><Icon name="skill-icons:nodejs-light" />Nodejs</li>
-            <li><Icon name="skill-icons:laravel-light" />Laravel</li>
-            <li><Icon name="skill-icons:postgresql-light" />PostgreSQL</li>
-            <li><Icon name="skill-icons:tailwindcss-light" />Tailwind</li>
-          </ul>
+
+        <div
+          class="flex md:flex-col flex-col-reverse items-center justify-center md:justify-start gap-3 md:gap-12">
+          <div class="text-gray-700 gap-1 flex-wrap flex -ml-1">
+            <a href={LINKS.github} aria-label="github profile" target="_blank">
+              <Button aria-label="github profile">
+                <Icon name="ri:github-fill" class="h-6 w-6" />
+                <span class="sr-only">GitHub Profil</span>
+              </Button>
+            </a>
+            <a
+              href={LINKS.linkedin}
+              aria-label="linkedin profile"
+              target="_blank">
+              <Button aria-label="linkedin profile">
+                <Icon name="ri:linkedin-box-fill" class="h-6 w-6" />
+                <span class="sr-only">Linkedin Profil</span>
+              </Button>
+            </a>
+            <a
+              href={LINKS.github2}
+              aria-label="dribble profile"
+              target="_blank">
+              <Button aria-label="dribble profile">
+                <Icon name="svgjs" class="h-6 w-6" />
+                <span class="sr-only">SVG.JS Github Profil</span>
+              </Button>
+            </a>
+            <a
+              href={LINKS.twitter}
+              aria-label="twitter profile"
+              target="_blank">
+              <Button aria-label="twitter profile">
+                <Icon name="ri:twitter-fill" class="h-6 w-6" />
+                <span class="sr-only">Twitter Profil</span>
+              </Button>
+            </a>
+          </div>
+
+          <div class="text-gray-700">
+            <p class="my-2 hidden md:block">A list of things I like.</p>
+            <ul
+              class="text-sm block [&>li]:flex [&>li]:gap-2 [&>li]:items-center columns-2">
+              <li><Icon name="skill-icons:vuejs-light" />Vue</li>
+              <li><Icon name="skill-icons:nuxtjs-light" />Nuxt</li>
+              <li><Icon name="skill-icons:typescript" />Typescript</li>
+              <li><Icon name="skill-icons:astro" />Astro</li>
+              <li><Icon name="skill-icons:vite-light" />Vite</li>
+              <li><Icon name="skill-icons:php-light" />PHP</li>
+              <li class="!hidden sm:!flex">
+                <Icon name="skill-icons:nodejs-light" />Nodejs
+              </li>
+              <li><Icon name="skill-icons:laravel-light" />Laravel</li>
+              <li class="!hidden sm:!flex">
+                <Icon name="skill-icons:postgresql-light" />PostgreSQL
+              </li>
+              <li><Icon name="skill-icons:tailwindcss-light" />Tailwind</li>
+            </ul>
+          </div>
         </div>
       </div>
 
       <div class="flex flex-col justify-center">
         <h2 class="text-3xl font-semibold text-gray-800">Who Am I?</h2>
         <p class="text-gray-700 mt-4">
-          Hey, I’m Ulrich-Matthias! I’ve always been the kind of developer who
-          enjoys getting into the nitty-gritty of things. Whether it’s
-          optimizing performance or refactoring old code, I’m drawn to solving
-          those kinds of challenges.
+          Hey, I’m Ulrich-Matthias from Germany! I’ve always been the kind of
+          developer who enjoys getting into the nitty-gritty of things. Whether
+          it’s optimizing performance or refactoring old code, I’m drawn to
+          solving those kinds of challenges.
         </p>
         <p class="text-gray-700 mt-4">
           My journey with web development started over a decade ago, and
