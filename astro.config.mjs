@@ -40,21 +40,21 @@ export default defineConfig({
         },
         {
           label: "Pricing",
-          link: "/pricing",
+          link: "/pricing/",
           attrs: {
             class: "md:sl-hidden",
           },
         },
         {
           label: "About Me",
-          link: "/about",
+          link: "/about/",
           attrs: {
             class: "md:sl-hidden",
           },
         },
         {
           label: "Contact",
-          link: "/contact",
+          link: "/contact/",
           attrs: {
             class: "md:sl-hidden",
           },
@@ -64,23 +64,23 @@ export default defineConfig({
           items: [
             {
               label: "Getting Started",
-              link: "/guide",
+              link: "/guide/",
             },
             {
               label: "Migrate to Vite",
-              link: "/guide/2-migrate-to-vite",
+              link: "/guide/2-migrate-to-vite/",
             },
             {
               label: "Migrate to TypeScript",
-              link: "/guide/3-migrate-to-typescript",
+              link: "/guide/3-migrate-to-typescript/",
             },
             {
               label: "Options API vs Composition API",
-              link: "/guide/4-options-api-vs-composition-api",
+              link: "/guide/4-options-api-vs-composition-api/",
             },
             {
               label: "Migrate to Vue 3",
-              link: "/guide/5-migrate-to-vue-3",
+              link: "/guide/5-migrate-to-vue-3/",
             },
           ],
         },

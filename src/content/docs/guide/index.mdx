@@ -18,7 +18,7 @@ This analysis will help define the scope of changes required to make your code c
 ### Options API
 
 If your components primarily use the Options Api, consider refactoring to the Composition Api, especially for larger applications. This refactoring is optional but can offer more flexibility and maintainability.
-However, it can consume a lot of resources and might not always be the best choice (see [Options API vs. Composition API](/guide/4-options-api-vs-composition-api)).
+However, it can consume a lot of resources and might not always be the best choice (see [Options API vs. Composition API](/guide/4-options-api-vs-composition-api/)).
 This step can be done later, component by component if needed, or as a first step by utilizing [script setup](https://vuejs.org/api/sfc-script-setup), which has been available since Vue 2.7.
 
 :::note[Opinion]
@@ -31,7 +31,6 @@ I recommend doing this even if it is not strictly necessary.
 Vue 3 changed the default prop/event combination for `v-model` from `:value`/`@input` to `modelValue`/`@update:modelValue`.
 It is required to update all occurrences on **custom components** that uses `v-model`.
 `<input>` and other form elements still use the native prop and event combination, e.g., `:value` and `@input`.
-{/* .sync and mode-event https://v2.vuejs.org/v2/guide/components-custom-events#Customizing-Component-v-model */}
 
 Vue 2 components use `value` and emit `input` events. Other synced props are possible with the sync modifier:
 
@@ -89,7 +88,7 @@ Vue 2 was based on `getters` and `setters` and could not track changes in an obj
 
 ### Deprecated `slot` / `slot-scope` syntax
 
-In Vue 2.6, a new syntax for slots and scoped slots was introduced, and `slot` / `slot-scope` was deprecated. If you still use the old syntax in your code, you must update it to the new syntax while migrating to Vue 3. This is also required for the vue-compat build to work (see [Setting Up the Vue-Compat Build and ESLint](/guide/5-migrate-to-vue-3#1-setting-up-the-vue-compat-build-and-eslint)).
+In Vue 2.6, a new syntax for slots and scoped slots was introduced, and `slot` / `slot-scope` was deprecated. If you still use the old syntax in your code, you must update it to the new syntax while migrating to Vue 3. This is also required for the vue-compat build to work (see [Setting Up the Vue-Compat Build and ESLint](/guide/5-migrate-to-vue-3/#1-setting-up-the-vue-compat-build-and-eslint)).
 
 ```vue title="OldSyntax.vue"
 <template>
@@ -183,14 +182,14 @@ We have covered all of Vue's core features; however, Vue plugins, component libr
 
 Here is a list of common dependencies used in Vue projects:
 
-- Vue: The core of the framework. You should definitely read their [migration guide](https://v3-migration.vuejs.org/) even if some information might be redundant. To help with migration, Vue comes with a [compatibility build](https://www.npmjs.com/package/@vue/compat) (also see [Setting Up the Vue-Compat Build and ESLint](/guide/5-migrate-to-vue-3#1-setting-up-the-vue-compat-build-and-eslint)).
+- Vue: The core of the framework. You should definitely read their [migration guide](https://v3-migration.vuejs.org/) even if some information might be redundant. To help with migration, Vue comes with a [compatibility build](https://www.npmjs.com/package/@vue/compat) (also see [Setting Up the Vue-Compat Build and ESLint](/guide/5-migrate-to-vue-3/#1-setting-up-the-vue-compat-build-and-eslint)).
 - Vue Router: Almost every project uses it. Follow the [migration guide](https://router.vuejs.org/guide/migration/index.html).
 - Vuex: Version 4 brings support for Vue 3. Refer to its [migration guide](https://vuex.vuejs.org/guide/migration.html).
 - Vuetify: Officially supported in Vue 3 after a long wait. It also has its own [migration guide](https://vuetifyjs.com/en/getting-started/upgrade-guide/) and an extra [eslint-plugin](https://www.npmjs.com/package/eslint-plugin-vuetify/) to ease the transition.
 - Element UI: Supported via Element Plus. A guide can be found [here](https://element-plus.org/en-US/guide/migration).
 - Quasar: Version 2 supports Vue 3 and has a dedicated guide [here](https://quasar.dev/start/upgrade-guide).
 - Bootstrap Vue: Tips for migrating can be found [here](https://bootstrap-vue.org/vue3).
-- Bundler: Consider switching to `Vite` if you still use `vue-cli` or `webpack` (see [Migrate to Vite](/guide/2-migrate-to-vite)).
+- Bundler: Consider switching to `Vite` if you still use `vue-cli` or `webpack` (see [Migrate to Vite](/guide/2-migrate-to-vite/)).
 
 :::tip[Good to know]
 The official recommendation for a state management library for Vue 3 has changed to [Pinia](https://pinia.vuejs.org).
@@ -198,7 +197,7 @@ Check it out and see if a migration is feasible. A guide is available [here](htt
 :::
 
 :::note
-While you're updating dependencies, consider updating others as well. Some libraries might become smaller, fix bugs, or add new features. In any case, it will increase your programmers' happiness ;). This is also a perfect time to reconsider your bundler strategy (see [Migrate to Vite](/guide/2-migrate-to-vite)).
+While you're updating dependencies, consider updating others as well. Some libraries might become smaller, fix bugs, or add new features. In any case, it will increase your programmers' happiness ;). This is also a perfect time to reconsider your bundler strategy (see [Migrate to Vite](/guide/2-migrate-to-vite/)).
 :::
 
 ## 3. Reviewing Component Libraries
@@ -257,7 +256,7 @@ Additionally, TypeScript is valuable in everyday development, and many developer
 However, transitioning an entire codebase to TypeScript can be challenging. If you're not already using TypeScript and don't intend to, the migration effort might not be justified.
 But if TypeScript should become part of your stack, **now** is an opportune time to fully integrate it.
 
-For more details, refer to [Migrate to TypeScript](/guide/3-migrate-to-typescript).
+For more details, refer to [Migrate to TypeScript](/guide/3-migrate-to-typescript/).
 
 ## Need Assistance?
 
