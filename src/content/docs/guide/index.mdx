@@ -128,12 +128,13 @@ In Vue 2.6, a new syntax for slots and scoped slots was introduced, and `slot` /
 
 Filters in Vue 2 were a convenient way to format text and data in templates, but they have been removed in Vue 3. If your codebase heavily relies on filters, you will need to refactor them into computed properties or methods.
 
-````vue title="Before.vue"
+```vue title="Before.vue"
 <template>
   <div>
     <h1>{{ msg | capitalize }}</h1>
   </div>
 </template>
+```
 
 ```vue title="AfterCompositionApi.vue"
 <script setup>
@@ -143,7 +144,7 @@ const msg = ref("this is a message");
 
 const capitalizedMsg = computed(() => capitalize(msg.value));
 </script>
-````
+```
 
 ```vue title="AfterOptionsApi.vue"
 <script>
