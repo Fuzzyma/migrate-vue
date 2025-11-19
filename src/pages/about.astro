@@ -10,9 +10,8 @@ import Button from "@components/ui/icon-button.astro";
 export const LINKS = {
   github: "https://github.com/Fuzzyma",
   github2: "https://github.com/svgdotjs",
-  linkedin:
-    "https://www.linkedin.com/in/ulrich-matthias-sch%C3%A4fer-a1a701176/",
-  twitter: "https://x.com/saulmurf",
+  linkedin: "https://www.linkedin.com/in/ulima",
+  bluesky: "https://bsky.app/profile/fuzzyma.bsky.social",
 };
 ---
 
@@ -65,12 +64,12 @@ export const LINKS = {
               </Button>
             </a>
             <a
-              href={LINKS.twitter}
-              aria-label="twitter profile"
+              href={LINKS.bluesky}
+              aria-label="bluesky profile"
               target="_blank">
-              <Button aria-label="twitter profile">
-                <Icon name="ri:twitter-fill" class="h-6 w-6" />
-                <span class="sr-only">Twitter Profil</span>
+              <Button aria-label="bluesky profile">
+                <Icon name="ri:bluesky-fill" class="h-6 w-6" />
+                <span class="sr-only">Bluesky Profil</span>
               </Button>
             </a>
           </div>
