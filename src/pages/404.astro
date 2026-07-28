@@ -1,6 +1,7 @@
 ---
 import Container from "@components/container.astro";
 import Layout from "@layouts/Layout.astro";
+import Link from "@components/ui/link.astro";
 ---
 
 <Layout title="404 Not Found">
@@ -9,6 +10,10 @@ import Layout from "@layouts/Layout.astro";
       <div class="mt-16 text-center">
         <h1 class="text-4xl lg:text-5xl font-bold lg:tracking-tight">404</h1>
         <p class="text-lg mt-4 text-slate-600">Page not found.</p>
+        <div class="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+          <Link href="/">Back to home</Link>
+          <Link href="/guide/" style="outline">Open the guide</Link>
+        </div>
       </div>
     </div>
   </Container>

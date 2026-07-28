@@ -14,9 +14,7 @@ Before diving headfirst into refactoring your entire codebase with the Compositi
 
 The Composition Api offers a more flexible and powerful way to organize your code, especially in large applications. It allows you to encapsulate logic in a way that is reusable and easy to test. However, it comes with a learning curve, particularly for teams accustomed to the Options Api. There's also the question of verbosity; some developers find the Composition Api less readable, especially for smaller components.
 
-Aside from personal preference, the main reason not to switch is cost. All developments in the Vue ecosystem are targeted towards the Composition Api. A good example is [VueUse](https://vueuse.org/), which provides a vast set of utilities that are easy to integrate.
-
-So, while the Options Api is still fully supported, you may miss out on newer developments and innovations.
+Aside from personal preference, the main reason not to switch is cost. Many libraries, such as [VueUse](https://vueuse.org/), expose composables that are most natural to use from the Composition Api. However, the Options Api remains an integral, fully supported part of Vue and there are no plans to deprecate it.
 
 :::tip[Pro Tip]
 For new projects or when starting fresh with Vue 3, consider the Composition Api. However, for existing projects heavily invested in the Options Api, weigh the benefits against the time and effort required for refactoring.
@@ -30,11 +28,10 @@ For new projects or when starting fresh with Vue 3, consider the Composition Api
 
 #### Composition Api Pros
 
-- More efficient
-- Easier to maintain
+- Can be easier to organize in large components with several logical concerns
 - Easier to share and reuse code with composables
 - Better type inference
-- Smaller production bundle and less overhead
+- With `<script setup>`, can produce more minification-friendly code with less instance-proxy overhead
 - Procedural (like programming)
 - Innovation happens here (e.g., `script setup`)
 

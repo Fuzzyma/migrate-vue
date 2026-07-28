@@ -8,9 +8,13 @@ head:
 
 ## Install TypeScript
 
+This guide assumes Vue 2.7.16, which includes `<script setup>` and Composition Api support. Earlier Vue 2 releases need a different setup and should be upgraded first. Vue 2 itself is end of life, so treat TypeScript adoption as one step toward Vue 3 rather than a replacement for the framework migration.
+
 ```bash
-npm install -D typescript
+npm install -D typescript@^6.0.0 vue-tsc@^3.3.8
 ```
+
+Vite transpiles TypeScript but does not type-check it. Add a script such as `"type-check": "vue-tsc --noEmit"` and run it in CI. The version pin above avoids TypeScript 7 until `vue-tsc` supports its package exports.
 
 ## Create a `tsconfig.json`
 
@@ -24,6 +28,8 @@ Create `tsconfig.json` in the root of your project folder and add the following 
     "module": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
+    "allowJs": true,
+    "types": ["vite/client"],
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -41,10 +47,13 @@ Create `tsconfig.json` in the root of your project folder and add the following 
 
     /* Path aliases in case you use them */
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"]
+  "include": ["src/**/*"],
+  "vueCompilerOptions": {
+    "target": 2.7
+  }
 }
 ```
 
@@ -60,18 +69,24 @@ To type your data appropriately, you have to use return signatures or cast it to
   <div>
     <h1>Options Api</h1>
     <p>{{ msg }}</p>
+    <button @click="hello">Log values</button>
   </div>
 </template>
 
 <script lang="ts">
-import { PropType } from "vue";
+import { defineComponent } from "vue";
+import type { PropType } from "vue";
+
+type SomeType = {
+  foo: string;
+};
 
 type MyData = {
   msg: string;
   items: string[];
 };
 
-export default {
+export default defineComponent({
   name: "OptionsApi",
   props: {
     prop1: {
@@ -89,7 +104,7 @@ export default {
       console.log(this.msg, this.items, this.prop1);
     },
   },
-};
+});
 </script>
 ```
 
@@ -98,21 +113,18 @@ export default {
   <div>
     <h1>Script Setup</h1>
     <p>{{ msg }}</p>
+    <button @click="hello">Log values</button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { PropType, ref } from "vue";
+import { ref } from "vue";
 
 type SomeType = {
   foo: string;
 };
 
-const props = defineProps({
-  prop1: {
-    type: Object as PropType<SomeType>,
-  },
-});
+const props = defineProps<{ prop1?: SomeType }>();
 
 const msg = ref("Hello World");
 const items = ref<string[]>([]);

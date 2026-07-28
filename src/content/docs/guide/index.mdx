@@ -36,17 +36,18 @@ Vue 2 components use `value` and emit `input` events. Other synced props are pos
 
 ```vue title="vue2-component.vue"
 <template>
-  <button @click="emit('input', value + 1)">Click me ({{ value }})</button>
-  <button @click="emit('update:otherValue', otherValue + 1)">
-    Click me ({{ otherValue }})
-  </button>
+  <div>
+    <button @click="$emit('input', value + 1)">Click me ({{ value }})</button>
+    <button @click="$emit('update:otherValue', otherValue + 1)">
+      Click me ({{ otherValue }})
+    </button>
+  </div>
 </template>
 
 <script>
-default export {
-  props: ['value', 'otherValue'],
-  emits: ['input', 'update:otherValue'],
-}
+export default {
+  props: ["value", "otherValue"],
+};
 </script>
 ```
 
@@ -54,21 +55,21 @@ Vue 3 components use `modelValue` and emit `update:modelValue` instead and allow
 
 ```vue title="vue3-component.vue"
 <template>
-  <button @click="emit('update:modelValue', value + 1)">
-    Click me ({{ value }})
+  <button @click="emit('update:modelValue', props.modelValue + 1)">
+    Click me ({{ props.modelValue }})
   </button>
-  <button @click="emit('update:otherValue', otherValue + 1)">
-    Click me ({{ otherValue }})
+  <button @click="emit('update:otherValue', props.otherValue + 1)">
+    Click me ({{ props.otherValue }})
   </button>
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   modelValue: Number,
   otherValue: Number,
 });
 
-defineEmits(["update:modelValue", "update:otherValue"]);
+const emit = defineEmits(["update:modelValue", "update:otherValue"]);
 </script>
 ```
 
@@ -84,7 +85,7 @@ Just think as `v-model` being the short form of `v-model:modelValue` and this be
 
 ### `Vue.set()` / `this.$set()`
 
-Vue 2 was based on `getters` and `setters` and could not track changes in an object directly. Therefore, it was necessary to explicitly "tell" Vue by using `Vue.set()` or `this.$set()`. However, Vue 3 uses proxies, so this is no longer required. These methods can be safely replaced with a normal assignment, e.g., `obj.foo = 'bar'`.
+Vue 2 used getters and setters and could not detect property addition after an object became reactive or direct array-index assignment. Those cases required `Vue.set()` / `this.$set()` or `splice()`. Reactive deletion used `Vue.delete()`, and changing an array's length also required `splice()`. Vue 3 uses proxies, so normal assignments and deletions are reactive when they are made through the proxied object.
 
 ### Deprecated `slot` / `slot-scope` syntax
 
@@ -138,16 +139,28 @@ Filters in Vue 2 were a convenient way to format text and data in templates, but
 
 ```vue title="AfterCompositionApi.vue"
 <script setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
+
+const capitalize = (value) => value.charAt(0).toUpperCase() + value.slice(1);
 
 const msg = ref("this is a message");
 
 const capitalizedMsg = computed(() => capitalize(msg.value));
 </script>
+
+<template>
+  <h1>{{ capitalizedMsg }}</h1>
+</template>
 ```
 
 ```vue title="AfterOptionsApi.vue"
+<template>
+  <h1>{{ capitalizedMsg }}</h1>
+</template>
+
 <script>
+const capitalize = (value) => value.charAt(0).toUpperCase() + value.slice(1);
+
 export default {
   data: () => ({
     msg: "this is a message",
@@ -163,9 +176,7 @@ export default {
 
 ### Custom Directives
 
-Custom directives are still supported in Vue 3. However, some changes might be required depending on how you use them. Vue 3 introduces a new lifecycle hook, `beforeUnmount`, and changes the signature for directive hooks. If your application relies on custom directives for significant DOM manipulations, you'll need to update these hooks to match the new API. While you're at it, you might want to consider removing directives altogether. There are some [rumors about custom directives being deprecated](https://youtu.be/xvkf3KOaRlQ?si=JAoLrkEX-p31NOQ2&t=1260) in later versions of Vue 3. Most of the time, a component can accomplish the same task more effectively.
-
-If you are writing your own directives, you surely can figure out the new syntax yourself ;).
+Custom directives remain supported in Vue 3, but their lifecycle hooks now align with component lifecycle names. The main mappings are `bind` → `beforeMount`, `inserted` → `mounted`, `componentUpdated` → `updated`, and `unbind` → `unmounted`. The old `update` hook was removed; `created`, `beforeUpdate`, and `beforeUnmount` were added. Review every custom directive against the [official directive migration guide](https://v3-migration.vuejs.org/breaking-changes/custom-directives.html).
 
 ### Mixins
 
@@ -192,7 +203,7 @@ Here is a list of common dependencies used in Vue projects:
 - Vuetify: Officially supported in Vue 3 after a long wait. It also has its own [migration guide](https://vuetifyjs.com/en/getting-started/upgrade-guide/) and an extra [eslint-plugin](https://www.npmjs.com/package/eslint-plugin-vuetify/) to ease the transition.
 - Element UI: Supported via Element Plus. A guide can be found [here](https://element-plus.org/en-US/guide/migration).
 - Quasar: Version 2 supports Vue 3 and has a dedicated guide [here](https://quasar.dev/start/upgrade-guide).
-- Bootstrap Vue: Tips for migrating can be found [here](https://bootstrap-vue.org/vue3).
+- BootstrapVue: The original library is Vue 2-first and supports Vue 3 only through global compat mode. For a native Vue 3 application, evaluate [BootstrapVueNext and its migration guide](https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/migration-guide.html).
 - Bundler: Consider switching to `Vite` if you still use `vue-cli` or `webpack` (see [Migrate to Vite](/guide/2-migrate-to-vite/)).
 
 :::tip[Good to know]

@@ -126,7 +126,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           tag: "meta",
           attrs: {
             property: "og:image:alt",
-            content: "migrate-vue Homepage Screenshot",
+            content:
+              "Migrate Vue 2 to Vue 3 with safe, maintainable modernization",
           },
         },
         {

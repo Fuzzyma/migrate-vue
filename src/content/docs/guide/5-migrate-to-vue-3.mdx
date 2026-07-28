@@ -14,24 +14,52 @@ Before starting the migration, make sure to read through the [Getting Started Gu
 
 ### 1. Setting Up the Vue-Compat Build and ESLint
 
-Not a lot of developers know, that the Vue maintainers created a compatibility build for Vue 3 (`vue-compat`). It all allows Vue 2 and Vue 3 code to coexist, making it possible to upgrade incrementally. Old syntax and features can be disabled globally or component wise so that you can upgrade every component one by one.
+The Vue maintainers provide `@vue/compat`: the Vue 3 runtime with configurable Vue 2-compatible behavior. It does not run Vue 2 and Vue 3 side by side, but it can let many Vue 2 APIs continue working while you migrate incrementally. Compatibility behavior can be disabled globally or per component.
 
-Start by installing the Vue-compat package using npm:
+Choose one Vue 3 version and install the runtime, compatibility build, and SFC compiler at that exact same version. Remove `vue-template-compiler` if the project still uses it.
 
 ```bash
-npm install @vue/compat
+npm remove vue-template-compiler
+npm install --save-exact vue@3 @vue/compat@3 @vue/compiler-sfc@3
 ```
 
-Next, configure ESLint to help catch potential compatibility issues during development. This involves installing the ESLint plugin for Vue and adjusting your ESLint configuration to extend the recommended settings for Vue 3:
+Then alias `vue` to `@vue/compat` and start in Vue 2 compatibility mode. For a Vite project:
 
-```json
-{
-  "extends": ["plugin:vue/vue3-recommended"],
-  "plugins": ["vue"]
-}
+```js title="vite.config.js"
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+
+export default defineConfig({
+  resolve: {
+    alias: { vue: "@vue/compat" },
+  },
+  plugins: [
+    vue({
+      template: {
+        compilerOptions: {
+          compatConfig: { MODE: 2 },
+        },
+      },
+    }),
+  ],
+});
 ```
 
-The Vue-compat build functions as a bridge, enabling you to use new Vue 3 features while still supporting existing Vue 2 code. That means one half of your team can still ship features while the other half does the migration.
+See the [official migration-build installation guide](https://v3-migration.vuejs.org/migration-build.html#installation) for webpack configuration, TypeScript augmentation, and known limitations.
+
+Install and configure ESLint to catch common Vue issues. Current ESLint uses a flat `eslint.config.js` file:
+
+```bash
+npm install -D eslint eslint-plugin-vue
+```
+
+```js title="eslint.config.js"
+import pluginVue from "eslint-plugin-vue";
+
+export default [...pluginVue.configs["flat/recommended"]];
+```
+
+The compatibility build can keep much of the application running while warnings identify behavior that still needs migration. Review its known limitations before committing to this path; some applications and dependencies cannot use it safely.
 
 ### 2. Utilizing the Vue-Compat Guide
 
@@ -54,7 +82,7 @@ That is especially true if those components don't have a lot of functionality an
 
 With third-party libraries updated, you can focus on migrating your own components. Using the Vue-compat build, you can incrementally disable old features on a per-component basis and update accordingly. This flexibility makes it easier to refactor components gradually.
 
-Aim to remove all Vue 2-specific features from your components to finally support Vue 3. Depending on the size of your project, you might consider batch upgrading components and globally disabling the Vue 2 compatibility flag once you feel confident in the stability of the migrated components. e.g. replacing `value` with `modelValue` with a find/replace.
+Aim to remove all Vue 2-specific features before switching from `@vue/compat` to Vue 3 proper. Disable compatibility features in tested batches and resolve the resulting warnings.
 
 ### 5. Frequently Asked Questions (FAQ)
 

@@ -1,59 +1,66 @@
 ---
 const migrationSteps = [
   {
-    step: "1. Assessment",
+    title: "Assessment",
     description:
-      'We start by reviewing your Vue 2 codebase to understand its structure, dependencies, and potential challenges. Our first assessment service offers a detailed migration plan with time estimates and key considerations. <a href="/pricing" class="text-blue-600">Learn more about our assessment and pricing</a> or <a href="/guide" class="text-blue-600">see our guide</a> on how to get your own hands dirty.',
-    // 'We start by reviewing your Vue 2 codebase to understand its structure, dependencies, and potential challenges. Our first assessment service offers a detailed migration plan with time estimates and key considerations. <a href="/pricing" class="text-blue-600">Learn more about our assessment and pricing</a>.',
-    icon: "🔍",
+      'I review the codebase, dependencies, tests, and deployment constraints. You get a practical sequence, risks, and estimate before committing to the work. <a href="/pricing">Learn about the assessment</a> or <a href="/guide">start with the guide</a>.',
   },
   {
-    step: "2. Preparation",
-    // description: "We prepare your development environment and ensure all dependencies are compatible with Vue 3. This includes upgrading build tools and making necessary project configurations to support the migration.",
+    title: "Preparation",
     description:
-      "This step involves upgrading your build tools, updating dependencies to ensure compatibility with Vue 3, and configuring your project settings. We'll help you set up a parallel environment where you can test the new Vue 3 features without affecting your production environment. Ensuring that all third-party libraries and tools used in your project are compatible with Vue 3 is vital. This may involve finding alternatives for packages that are no longer supported or updating configurations to meet the new standards.",
-    icon: "🛠️",
+      "We stabilize build tooling, testing, dependencies, and the migration branch so every later change can be checked safely.",
   },
   {
-    step: "3. Migration",
+    title: "Migration",
     description:
-      "This step involves systematically updating your components, directives, and other Vue 2 specific syntax to align with Vue 3's new API. We prioritize maintaining the functionality of your application while refactoring to use Vue 3's features, such as the Composition API, Teleport, and new lifecycle hooks.",
-    icon: "⚙️",
+      "Components, routing, state, modules, and framework conventions move in controlled slices while behavior stays reviewable.",
   },
   {
-    step: "4. Testing",
+    title: "Testing",
     description:
-      "We conduct comprehensive testing to ensure your application works seamlessly after the migration. This includes optimizing performance to leverage the speed and efficiency improvements in Vue 3.",
-    icon: "✅",
+      "Automated checks and targeted manual testing verify real user journeys, not only whether the new application builds.",
   },
   {
-    step: "5. Deployment",
+    title: "Deployment",
     description:
-      "We handle the deployment to ensure a smooth transition to Vue 3 with minimal downtime. Post-migration, we offer support to address any issues and optimize performance further.",
-    icon: "🚀",
+      "The release is planned, monitored, and documented so your team can confidently own the modernized codebase.",
   },
 ];
 ---
 
-<section class="migration-process-section py-12">
-  <h2 class="text-3xl font-bold text-center mb-6">
-    How the Migration Process Works
-  </h2>
-  <div class="space-y-12">
-    {
-      migrationSteps.map((step) => (
-        <div class="flex items-center">
-          <div class="text-5xl mb-4 md:mb-0 lg:w-1/4 justify-center hidden lg:flex">
-            {step.icon}
-          </div>
-          <div class="lg:w-3/4 w-full">
-            <h3 class="text-2xl font-semibold mb-3">
-              <span class="inline lg:hidden">{step.icon}</span> {step.step}
+<section class="py-16 md:py-20" aria-labelledby="process-title">
+  <div class="rounded-2xl bg-[#f2fbf7] px-6 py-10 md:px-10 md:py-12">
+    <h2
+      id="process-title"
+      class="text-center text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">
+      How the Migration Process Works
+    </h2>
+    <p class="mx-auto mt-3 max-w-2xl text-center leading-relaxed text-gray-600">
+      One visible path from the first technical review to a production-ready
+      handover.
+    </p>
+
+    <ol class="relative mx-auto mt-12 max-w-4xl">
+      <div
+        aria-hidden="true"
+        class="absolute bottom-8 left-5 top-8 w-px bg-[#b9ead3] sm:left-7">
+      </div>
+      {
+        migrationSteps.map((step, index) => (
+          <li class="relative grid grid-cols-[2.5rem_1fr] gap-5 border-b border-[#cfe8dc] py-7 last:border-b-0 sm:grid-cols-[3.5rem_10rem_1fr] sm:gap-7">
+            <span class="z-10 grid h-10 w-10 place-items-center rounded-full border border-[#8fd5b3] bg-white font-mono text-sm font-bold text-[#287f5d] sm:h-14 sm:w-14">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <h3 class="pt-2 text-xl font-semibold text-gray-900 sm:pt-3">
+              {step.title}
             </h3>
-            <p class="text-lg text-gray-700" set:html={step.description} />
-          </div>
-        </div>
-      ))
-    }
+            <p
+              class="col-start-2 leading-relaxed text-gray-600 sm:col-start-3 sm:pt-3 md:text-lg [&_a]:font-medium [&_a]:text-[#287f5d] [&_a]:underline [&_a]:underline-offset-2"
+              set:html={step.description}
+            />
+          </li>
+        ))
+      }
+    </ol>
   </div>
 </section>

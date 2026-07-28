@@ -1,43 +1,64 @@
 ---
+import { Icon } from "astro-icon/components";
 
+const principles = [
+  {
+    title: "Confidential by default",
+    text: "Code and data stay inside a controlled working environment with limited access.",
+    icon: "mdi:lock-outline",
+  },
+  {
+    title: "No unnecessary exposure",
+    text: "Your intellectual property is not sent to third-party services without your direction.",
+    icon: "mdi:shield-lock-outline",
+  },
+  {
+    title: "Reviewable changes",
+    text: "Migration work remains transparent, traceable, and aligned with the agreed scope.",
+    icon: "mdi:file-check-outline",
+  },
+  {
+    title: "Practical security",
+    text: "Secure development habits are applied throughout the assessment, implementation, and handover.",
+    icon: "mdi:security",
+  },
+];
 ---
 
-<section class="data-security-section py-12">
-  <h2 class="text-3xl font-bold text-center mb-8">
-    Your Data & Code Are Handled with Care
-  </h2>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-    <div class="p-6 border rounded-lg shadow-md">
-      <h3 class="text-xl font-semibold mb-4">Privacy and Confidentiality</h3>
-      <p class="text-gray-700">
-        We handle your data and code with the utmost confidentiality. All work
-        is done in a secure, controlled environment to ensure that your
-        intellectual property remains protected.
-      </p>
-    </div>
-    <div class="p-6 border rounded-lg shadow-md">
-      <h3 class="text-xl font-semibold mb-4">Preventing Data Leaks</h3>
-      <p class="text-gray-700">
-        We take careful measures to prevent any data leaks. Your code and data
-        stay within our controlled environment, with no unnecessary exposure to
-        third-party services.
-      </p>
-    </div>
-    <div class="p-6 border rounded-lg shadow-md">
-      <h3 class="text-xl font-semibold mb-4">Maintaining Integrity</h3>
-      <p class="text-gray-700">
-        We ensure that your code is handled with integrity. No changes will be
-        made to your codebase without your explicit direction, and the migration
-        process is done carefully to avoid any unintended modifications.
-      </p>
-    </div>
-    <div class="p-6 border rounded-lg shadow-md">
-      <h3 class="text-xl font-semibold mb-4">Practical Security Practices</h3>
-      <p class="text-gray-700">
-        We follow robust and practical security measures. This includes secure
-        development practices and regularly updating our systems to minimize
-        risks.
-      </p>
+<section class="py-16 md:py-20" aria-labelledby="security-title">
+  <div class="rounded-2xl bg-[#f2fbf7] px-6 py-10 md:px-10 md:py-12">
+    <h2
+      id="security-title"
+      class="text-center text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">
+      Your Data & Code Are Handled with Care
+    </h2>
+    <p class="mx-auto mt-3 max-w-2xl text-center leading-relaxed text-gray-600">
+      The same controlled path used for the migration also governs how your
+      product is accessed and changed.
+    </p>
+
+    <div class="mt-9 grid border-y border-[#b9ead3] md:grid-cols-2">
+      {
+        principles.map((principle, index) => (
+          <div
+            class:list={[
+              "flex gap-4 py-6 md:px-7",
+              index > 0 && "border-t border-[#b9ead3] md:border-t-0",
+              index > 1 && "md:border-t md:border-[#b9ead3]",
+              index % 2 === 0 && "md:border-r md:border-[#b9ead3]",
+            ]}>
+            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-[#b9ead3] bg-white text-xl text-[#287f5d]">
+              <Icon name={principle.icon} />
+            </span>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900">
+                {principle.title}
+              </h3>
+              <p class="mt-2 leading-relaxed text-gray-600">{principle.text}</p>
+            </div>
+          </div>
+        ))
+      }
     </div>
   </div>
 </section>

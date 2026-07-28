@@ -1,0 +1,28 @@
+---
+import Container from "@components/container.astro";
+import Layout from "@layouts/Layout.astro";
+import Link from "@components/ui/link.astro";
+---
+
+<Layout title="Message sent">
+  <Container>
+    <div
+      class="mx-auto flex min-h-[60vh] max-w-2xl flex-col items-center justify-center py-20 text-center">
+      <div
+        class="mb-6 grid h-14 w-14 place-items-center rounded-full bg-green-50 text-2xl text-[#287f5d]">
+        ✓
+      </div>
+      <h1 class="text-4xl font-bold tracking-tight text-gray-900 md:text-5xl">
+        Thanks—your message was sent.
+      </h1>
+      <p class="mt-5 text-lg leading-relaxed text-gray-600">
+        I'll review the project context and respond personally. In the meantime,
+        the migration guide may answer some initial questions.
+      </p>
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+        <Link href="/guide/">Read the guide</Link>
+        <Link href="/" style="outline">Back to home</Link>
+      </div>
+    </div>
+  </Container>
+</Layout>

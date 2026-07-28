@@ -21,14 +21,14 @@ This guide will take you step-by-step through refactoring your Vue application f
 
 Let's first set up a fresh Vite project as a reference.
 
-In your terminal, navigate to your projects directory and create a Vite project:
+For Vue, start with the official `create-vue` scaffolder. It creates a Vite-powered project and can include TypeScript, tests, Router, and Pinia:
 
 ```bash
-npx create-vite my-project
+npm create vue@latest
 cd my-project
 ```
 
-Choose Vue (or your preferred framework) and TypeScript if applicable.
+Current scaffolding tools require a current Node.js version. Check the [Vue quick start](https://vuejs.org/guide/quick-start.html) before running the command; the current `create-vue` requirement is Node.js `^22.18.0 || >=24.12.0`. Vite 8 itself supports Node.js 20.19+ or 22.12+.
 Explore the new project structure before proceeding.
 
 To see Vite in action, run:
@@ -40,7 +40,7 @@ npm run dev
 
 ## Migrating a Vue Project from Vue CLI
 
-If your project is already on Vue 3, simply copy your `src` directory and any necessary assets like `public` into the Vite project:
+If your project is already on Vue 3, use the fresh project as a reference—but do not blindly copy `src` and configuration. First inventory Vue CLI plugins, aliases, environment access, HTML interpolation, `require.context` calls, test setup, and package scripts, then map each feature to its Vite equivalent.
 
 ```diff
 // Original Vue CLI Structure
@@ -58,23 +58,23 @@ my-project/
 └── package.json
 ```
 
-For Vue 2 (or other frameworks), directly install Vite in your existing project.
+For Vue 3, install Vite and the Vue plugin in the existing project if you are not using a fresh scaffold:
 
 ```bash
-npm i -D vite
+npm install -D vite @vitejs/plugin-vue
 ```
 
-Most of the Vue CLI configuration is the same as Vite. So you can just copy it over.
+Vue 2.7 can use `@vitejs/plugin-vue2`, but the latest plugin supports Vite 3–7 rather than Vite 8, and Vue 2 is end of life. Pin compatible versions deliberately and treat this as a temporary migration step, not a current long-term stack.
 
 :::caution[Environment Variables]
 Vue CLI uses the prefix `VUE_APP_` for env vars that are available in your code. Vite, however, uses `VITE_`.
-To avoid renaming all variables, add this to `vite.config.js`:
+You can temporarily accept both prefixes with `envPrefix`, but this does **not** preserve existing `process.env.VUE_APP_*` expressions. Replace those usages with `import.meta.env.VUE_APP_*`. Every variable matching an exposed prefix is included in client code, so never put secrets in it.
 
 ```js
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  envPrefix: "VUE_APP_",
+  envPrefix: ["VITE_", "VUE_APP_"],
 });
 ```
 
@@ -127,7 +127,7 @@ module.exports = {
 Vite automatically handles entry points and mode settings. By default, it uses `index.html` and outputs builds to `dist`.
 The mode is set to `development` for the dev server and to `production` for the build.
 
-If you need multiple entry points, or you are a library author, you can define them in `vite.config.js` like this:
+Multi-page applications and libraries use different configurations. For a multi-page application, point Rolldown at multiple HTML entry files:
 
 ```js title="vite.config.js"
 import { resolve } from "path";
@@ -135,37 +135,39 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   build: {
-    outDir: "dist",
-    lib: {
-      entry: resolve(__dirname, "lib/main.js"),
-      name: "MyLib",
-      fileName: "my-lib", // Extensions will be added automatically
+    rolldownOptions: {
+      input: {
+        main: resolve(import.meta.dirname, "index.html"),
+        admin: resolve(import.meta.dirname, "admin/index.html"),
+      },
     },
   },
 });
 ```
 
+Library authors should instead use [`build.lib`](https://vite.dev/guide/build.html#library-mode) and externalize dependencies such as Vue according to the library's packaging requirements.
+
 If you need to change your Vite config depending on the mode, you can pass a function to `defineConfig`:
 
 ```js title="vite.config.js"
-import { resolve } from "path";
+import { defineConfig } from "vite";
 
-export default ({ mode }) => {
+export default defineConfig(({ mode }) => {
   return {
     // do something with mode
   };
-};
+});
 ```
 
-You can find more details in the official [Vite documentation](https://vitejs.dev/guide/build/#library-mode).
+You can find more details in the official [Vite build documentation](https://vite.dev/guide/build).
 
 ### Webpack Loaders
 
-Webpack uses loaders to handle file transformations, while Vite relies on [ESBuild](https://esbuild.github.io/) for most features right out of the box.
+Webpack uses loaders to handle file transformations, while current Vite releases provide built-in handling for common web assets and use Oxc/Rolldown internally. Verify each loader's behavior before removing it.
 
-Here is a list of loaders you can safely remove from your Webpack configuration:
+Here are common loaders that may be removable after you verify that Vite or an installed plugin covers the same behavior:
 
-- **Babel Loader**: Vite uses ESBuild for fast transpiling, eliminating the need for Babel.
+- **Babel Loader**: Remove it only if you do not rely on custom Babel plugins, syntax transforms, or polyfill injection. Map every non-standard transformation to native Vite support or a compatible plugin first.
 - **File Loader / URL Loader**: Vite automatically handles static assets (e.g., images, SVGs, JSON). More details in the [Vite documentation](https://vitejs.dev/guide/assets.html).
 - **CSS/Sass/SCSS Loader / Style Loader**: Vite offers native support for CSS and preprocessors like Sass/SCSS. Just make sure you have the necessary pre-processor installed. Importing CSS files will automatically add them to the DOM.
 - **JSON Loader**: JSON imports work out-of-the-box with Vite.
@@ -173,7 +175,11 @@ Here is a list of loaders you can safely remove from your Webpack configuration:
 For other specific loaders, you might need a Vite plugin. While I can't cover all loader types, note that Vite generally handles most use cases Webpack does, with few exceptions.
 
 :::caution[Legacy Browsers]
-Vite's default build target is modern browsers, as listed [here](https://v3.vitejs.dev/guide/build.html#browser-compatibility). If you need to support older browsers, use the legacy plugin:
+Vite's default build target is modern browsers. Vite 8 uses the `baseline-widely-available` target (Chrome/Edge 111, Firefox 114, and Safari 16.4). If you need to support older browsers, install and configure the official legacy plugin:
+
+```bash
+npm install -D @vitejs/plugin-legacy
+```
 
 ```js title="vite.config.js"
 import legacy from "@vitejs/plugin-legacy";
@@ -217,7 +223,9 @@ Both Webpack and Vite offer development servers, but Vite’s is significantly f
 ```js title="webpack.config.js"
 module.exports = {
   devServer: {
-    contentBase: "./dist",
+    static: {
+      directory: "./dist",
+    },
     hot: true,
   },
 };
@@ -236,7 +244,7 @@ export default defineConfig({
 
 ### Aliases
 
-Webpack and Vite use exactly the same configuration for aliases:
+Webpack and Vite have similar alias configuration, but Vite expects absolute filesystem replacement paths:
 
 ```js title="webpack.config.js"
 const path = require("path");
@@ -256,7 +264,7 @@ import { resolve } from "path";
 export default {
   resolve: {
     alias: {
-      "@": resolve(__dirname, "src"),
+      "@": resolve(import.meta.dirname, "src"),
     },
   },
 };
@@ -289,25 +297,33 @@ require("dotenv").config({ path: "./.env" });
 module.exports = {
   plugins: [
     new webpack.DefinePlugin({
-      "process.env": JSON.stringify(process.env),
+      "process.env.PUBLIC_API_ORIGIN": JSON.stringify(
+        process.env.PUBLIC_API_ORIGIN,
+      ),
     }),
   ],
 };
 ```
 
-Vite automatically loads all environment variables prefixed with `VITE_` and makes them available under `import.meta.env`. If you need to use an environment variable without the `VITE_` prefix, you can define it manually in your vite.config.js:
+Vite loads environment variables prefixed with `VITE_` and exposes them through `import.meta.env`. Never expose the entire build environment. If you intentionally need a differently named public value, load the environment for the active mode and define that one key explicitly:
 
 ```js title="vite.config.js"
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 
-export default defineConfig({
-  define: {
-    "import.meta.env.ENV_VARIABLE": JSON.stringify(process.env.ENV_VARIABLE),
-  },
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), "");
+
+  return {
+    define: {
+      "import.meta.env.PUBLIC_API_ORIGIN": JSON.stringify(
+        env.PUBLIC_API_ORIGIN,
+      ),
+    },
+  };
 });
 ```
 
-See the corresponding [official docs](https://vitejs.dev/guide/env-and-mode.html) for more details.
+See the corresponding [official docs](https://vite.dev/guide/env-and-mode.html) for more details.
 
 ### Custom Code Splitting (chunks)
 
@@ -322,21 +338,29 @@ const UserProfileEdit = () =>
   import(/* webpackChunkName: "group-user" */ "./UserProfileEdit");
 ```
 
-This can be done in Vite using the `manualChunks` option.
+Vite preserves code splitting created by dynamic imports. Do not copy webpack chunk comments or old `build.rollupOptions.output.manualChunks` examples into current Vite 8: Vite 8 uses Rolldown, and object-form `manualChunks` has been removed. First measure the default output. If manual grouping is still needed, use the current [`build.rolldownOptions.output.codeSplitting.groups`](https://rolldown.rs/in-depth/manual-code-splitting) API and match resolved module IDs carefully.
+
+For example, this keeps Vue ecosystem dependencies in a stable vendor chunk and groups the three user-area modules from the example above into `group-user`:
 
 ```js title="vite.config.js"
 import { defineConfig } from "vite";
 
 export default defineConfig({
   build: {
-    rollupOptions: {
-      // https://rollupjs.org/guide/en/#outputmanualchunks
+    rolldownOptions: {
       output: {
-        manualChunks: {
-          "group-user": [
-            "./src/UserDetails",
-            "./src/UserDashboard",
-            "./src/UserProfileEdit",
+        codeSplitting: {
+          groups: [
+            {
+              name: "vue-vendor",
+              test: /node_modules[\\/](?:vue|vue-router|pinia)[\\/]/,
+              priority: 20,
+            },
+            {
+              name: "group-user",
+              test: /[\\/]src[\\/](?:UserDetails|UserDashboard|UserProfileEdit)\.(?:js|ts|vue)(?:\?|$)/,
+              priority: 10,
+            },
           ],
         },
       },
@@ -345,6 +369,8 @@ export default defineConfig({
 });
 ```
 
+The `test` expressions run against resolved module IDs, and higher-priority groups win when more than one group matches. Keep the patterns narrow, run a production build, and inspect the resulting chunk graph: manual grouping can alter side-effect execution order and adds a small `runtime.js` chunk.
+
 ### Framework Integration
 
 To integrate your preferred framework with Vite, add the corresponding plugin to your project. Here's how you can set it up in your vite.config.js:
@@ -352,20 +378,15 @@ To integrate your preferred framework with Vite, add the corresponding plugin to
 ```js title="vite.config.js"
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-import react from "@vitejs/plugin-react";
-import solid from "vite-plugin-solid";
-import svelte from "@sveltejs/vite-plugin-svelte";
 
 export default defineConfig({
-  plugins: [
-    vue(), // Replace 'vue()' with the plugin for your framework
-  ],
+  plugins: [vue()],
 });
 ```
 
 ### Other Webpack Plugins
 
-Webpack has a vast ecosystem of plugins for various configurations, making it impractical to cover all of them here. However, since Vite uses Rollup under the hood for bundling, you can often find a Rollup plugin that provides the functionality you need. Check out the [Rollup plugin repository](https://github.com/rollup/plugins) for available options.
+Webpack has a vast ecosystem of plugins, so make a feature-by-feature inventory rather than assuming direct compatibility. Prefer documented Vite plugins and verify that each plugin supports your installed Vite major version. Vite 8 uses Rolldown rather than Rollup for bundling.
 
 ## Need Assistance?
 
