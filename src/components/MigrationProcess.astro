@@ -48,14 +48,14 @@ const migrationSteps = [
       {
         migrationSteps.map((step, index) => (
           <li class="relative grid grid-cols-[2.5rem_1fr] gap-5 border-b border-[#cfe8dc] py-7 last:border-b-0 sm:grid-cols-[3.5rem_10rem_1fr] sm:gap-7">
-            <span class="z-10 grid h-10 w-10 place-items-center rounded-full border border-[#8fd5b3] bg-white font-mono text-sm font-bold text-[#287f5d] sm:h-14 sm:w-14">
+            <span class="z-10 grid h-10 w-10 place-items-center rounded-full border border-[#8fd5b3] bg-white font-mono text-sm font-bold text-[#33a06f] sm:h-14 sm:w-14">
               {String(index + 1).padStart(2, "0")}
             </span>
             <h3 class="pt-2 text-xl font-semibold text-gray-900 sm:pt-3">
               {step.title}
             </h3>
             <p
-              class="col-start-2 leading-relaxed text-gray-600 sm:col-start-3 sm:pt-3 md:text-lg [&_a]:font-medium [&_a]:text-[#287f5d] [&_a]:underline [&_a]:underline-offset-2"
+              class="col-start-2 leading-relaxed text-gray-600 sm:col-start-3 sm:pt-3 md:text-lg [&_a]:font-medium [&_a]:text-[#33a06f] [&_a]:underline [&_a]:underline-offset-2"
               set:html={step.description}
             />
           </li>
